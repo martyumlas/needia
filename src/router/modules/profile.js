@@ -3,6 +3,7 @@ import CreateOffer from '../../view/profile/CreateOffer'
 import CreateNeed from '../../view/profile/CreateNeed'
 import MyOffers from '../../view/profile/MyOffers'
 import MyNeeds from '../../view/profile/MyNeeds'
+import EditProfile from '../../view/profile/EditProfile'
 
 import Form from '../../components/Form'
 
@@ -39,6 +40,11 @@ const profile = [
                 path : '/form',
                 component: Form,
                 name: 'Form'
+            },
+            {
+                path : '/edit-profile',
+                component: EditProfile,
+                name: 'EditProfile'
             }
         ]
     }

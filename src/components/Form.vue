@@ -1,33 +1,43 @@
 <template>
   <div >
      <form @submit.prevent="handlePost">
-         <div class="alert alert-danger" v-if="errors" >
-            <ul v-for="items in errors" :key="items.id">
-            <li v-for="error in items" :key="error.id">{{error}}</li>
-            </ul>
+          <div class="form-check" v-if="isEditing">
+            <input type="checkbox" class="form-check-input" id="movers" true-value="1"  false-value="0" v-model="post.is_published">
+            <label class="form-check-label" for="movers">Publish</label>
         </div>
          <div class="form-group">
                <input type="file" multiple @change="onFileChange" />
          </div>
-         <div class="row">
-            <div v-for="(image, key) in images" :key="key">
-                <button type="submit" class="close" @click="removeFile( key )">
-                    <span>&times;</span>
-                </button>
-                <img class="preview" :ref="'image'" style="height:100px; width: 100px" />
+         <div  class="row">
+             <div class="row">
+                <div v-for="(image, key) in images" :key="key">
+                    <button class="close" @click="removeFile( key )">
+                        <span>&times;</span>
+                    </button>
+                    <img class="preview" :ref="'image'" style="height:100px; width: 100px" />
+                </div>
+            </div>
+            <div  class="row" v-if="isEditing" >
+                <div v-for="(image, key) in post.images" :key="key">
+                    <button class="close" @click="removeFile( key )">
+                        <span>&times;</span>
+                    </button>
+                    <img class="preview" :src="baseUrl + image.photo_url" style="height:100px; width: 100px" />
+                </div>
             </div>
          </div>
+
          <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="categories">Category</label>
                 <select id="categories" class="form-control" @change="setSubcategories" v-model="post.category_id" required>
-                    <option selected v-for="category in categories" :key="category.id" :value="category.id">{{category.title}}</option>
+                    <option selected v-for="category in categories" :key="category.id" :value="!isEditing ? category.id : post.category_id">{{category.title}}</option>
                 </select>
             </div>
             <div class="form-group col-md-6">
                 <label for="sub_categories">Subcategory</label>
-                <select id="sub_categories" class="form-control" v-model="post.sub_category_id">
-                    <option selected v-for="sub_categories in sub_categories" :key="sub_categories.id" :value="sub_categories.id">{{sub_categories.title}}</option>
+                <select id="sub_categories" class="form-control" v-model="post.sub_category_id" >
+                    <option selected v-for="sub_categories in sub_categories" :key="sub_categories.id"  :value="sub_categories.id">{{sub_categories.title}}</option>
                 </select>
             </div>
         </div>
@@ -67,9 +77,19 @@
                 <input type="text" class="form-control" id="mileage" placeholder="Mileage" autocomplete="off" v-model="post.mileage">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="postType === 1">
             <label for="price">Price</label>
             <input type="text" class="form-control" id="price" placeholder="Price" autocomplete="off" v-model="post.price">
+        </div>
+        <div class="form-row" v-if="postType== 2">
+            <div class="form-group col-md-6">
+                <label for="price">Min Price</label>
+                <input type="text" class="form-control" id="price" placeholder="Price" autocomplete="off" v-model="post.min_price">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="price">Max Price</label>
+                <input type="text" class="form-control" id="price" placeholder="Price" autocomplete="off" v-model="post.max_price">
+            </div>
         </div>
         <div v-if="typeId === 5">
               <div class="form-group">
@@ -77,12 +97,12 @@
                 <textarea class="form-control" v-model="post.type_of_vehicle"></textarea>
             </div>
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1" v-model="post.driver"  true-value="1"  false-value="0">
-                <label class="form-check-label" for="exampleCheck1">Driver</label>
+                <input type="checkbox" class="form-check-input" id="driver" v-model="post.driver"  true-value="1"  false-value="0">
+                <label class="form-check-label" for="driver">Driver</label>
             </div>
              <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1" true-value="1"  false-value="0" v-model="post.movers">
-                <label class="form-check-label" for="exampleCheck1">Movers</label>
+                <input type="checkbox" class="form-check-input" id="movers" true-value="1"  false-value="0" v-model="post.movers">
+                <label class="form-check-label" for="movers">Movers</label>
             </div>
             <div class="form-group">
                 <label for="no_of_movers">No of Movers</label>
@@ -153,7 +173,7 @@
             <label for="inputCity">Description</label>
             <textarea class="form-control" v-model="post.description" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary float-right">Create Post</button>
+        <button type="submit" class="btn btn-primary float-right">{{isEditing ? 'Update Post' : 'Create Post'}}</button>
     </form>
   </div>
 </template>
@@ -163,7 +183,7 @@ import { mapGetters } from 'vuex'
 export default {
     data(){
         return{
-            post:[],
+            // post:[],
             sub_categories: [],
             bed_and_bath: ['1', '2', '3', '4', '5+'],
             property_type: ['apartment', 'condominium', 'house', 'room'],
@@ -172,7 +192,7 @@ export default {
             images: []
         }
     },
-    computed:mapGetters(['categories', 'typeId', 'errors']),
+    computed:mapGetters(['categories', 'typeId','postType', 'post', 'isEditing','baseUrl', 'subCategories']),
     methods:{
         setSubcategories(){
             this.categories.filter(category => {
@@ -180,9 +200,14 @@ export default {
                     this.sub_categories = category.sub_categories
                 }
             })
+
         },
         handlePost(){
-            this.$store.dispatch('createPost', {post: this.post, images: this.images})
+            if(this.isEditing){
+                this.$store.dispatch('editPost', {post: this.post, images: this.images, postImages : this.post.images})
+            }else{
+                this.$store.dispatch('createPost', {post: this.post, images: this.images})
+            }
         },
         onFileChange(e) {
             var selectedFiles = e.target.files;
@@ -201,8 +226,16 @@ export default {
 
                 reader.readAsDataURL(this.images[i]);
             }
+
         },
         removeFile( key ){
+            if(this.isEditing){
+               this.post.images.splice(key, 1)
+            }else{
+                this.images.splice( key, 1 );
+            }
+        },
+        additionalRemoveImage(key){
             this.images.splice( key, 1 );
         }
 
@@ -210,6 +243,16 @@ export default {
     mounted(){
         this.$store.commit('setMessage', '')
         this.$store.commit('setErrors', '')
+
+        if(this.isEditing){
+             this.categories.filter(category => {
+                if(this.post.category_id === category.id){
+                    this.sub_categories = category.sub_categories
+                }
+            })
+        }
+
+
     }
 }
 </script>

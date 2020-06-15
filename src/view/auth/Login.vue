@@ -2,7 +2,7 @@
   <div class="container">
   <div class="row h-100 justify-content-center align-items-center">
     <form class="col-md-4" @submit.prevent="login">
-      <div class="alert alert-danger" v-if="errors">{{errors}}</div>
+      <Errors/>
       <div class="card">
         <div class="card-header">Login</div>
         <div class="card-body">
@@ -27,8 +27,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Errors from '../../components/Errors'
 export default {
   computed:mapGetters(['errors']),
+  components: {Errors},
   data(){
     return {
       email: '',

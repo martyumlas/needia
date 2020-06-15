@@ -18,7 +18,10 @@ const store = new Vuex.Store({
         password: '',
         isLoggedIn: false,
         message: '',
-        errors: ''
+        errors: '',
+      //  baseUrl : 'https://needia.demo.thinkbitsolutions.com/',
+        baseUrl : 'http://localhost:6600/',
+        updateUser: ''
 
     },
     mutations:{
@@ -26,7 +29,8 @@ const store = new Vuex.Store({
         isLoggedIn : (state, status) => state.isLoggedIn = status,
         setMessage: (state, message) => state.message = message,
         setErrors: (state, errors) => state.errors = errors,
-        setPassword: (state, password) => state.password = password
+        setPassword: (state, password) => state.password = password,
+        setUpdateUser:(state, user) => state.updateUser =  user
     },
     actions:{
         async register({commit}, payload)
@@ -45,11 +49,17 @@ const store = new Vuex.Store({
             commit('setMessage', '')
             try {
                 const res = await axios.post('api/login', payload)
-                commit('setUser', res.data.user)
-                commit('isLoggedIn', true)
-                router.push('/')
+                if(res.data.user.email_verified_at == null){
+                    commit('setErrors', res.data.message)
+                    console.log(res.data)
+                }else{
+                    commit('setUser', res.data.user)
+                    commit('isLoggedIn', true)
+                    router.push('/')
+                }
+
             } catch (error) {
-               commit('setErrors', error.response.data.error);
+               commit('setErrors', error.response.data.errors);
             }
         },
         logout({commit}){
@@ -67,6 +77,46 @@ const store = new Vuex.Store({
             } catch (error) {
                 console.log(error)
             }
+        },
+        async getUser({commit, state}){
+            try {
+                const res = await axios.get('api/user/' + state.user.id)
+                console.log(res.data),
+                commit('setUpdateUser', res.data)
+            } catch (error) {
+                commit('setErrors', error.response.data.errors);
+            }
+        },
+        async updateUser({commit}, payload){
+            commit('setMessage','')
+            commit('setErrors', '')
+            try {
+                let form = new FormData
+
+                Object.entries(payload.user).forEach(([key, value]) =>{
+                    form.append(key, value)
+                })
+                form.append('image', payload.image)
+                form.append('_method','PATCH')
+                form.delete('role')
+                form.delete('deleted_at')
+                form.delete('updated_at')
+                form.delete('created_at')
+                form.delete('photo_alt')
+                form.delete('photo_extension')
+                form.delete('photo_url')
+                form.delete('fcm_notification_key')
+
+
+
+                const res = await axios.post('api/user/' + payload.user.id, form)
+                commit('setMessage', res.data.message)
+                commit('setUser', res.data.user)
+                commit('setUpdateUser', res.data.user)
+
+            } catch (error) {
+                commit('setErrors', error.response.data.errors);
+            }
         }
     },
     getters:{
@@ -75,6 +125,8 @@ const store = new Vuex.Store({
         isLoggedIn : (state) => state.isLoggedIn,
         errors : (state) => state.errors,
         password : (state) => state.password,
+        baseUrl : (state) => state.baseUrl,
+        updateUser: (state) => state.updateUser
     }
 })
 

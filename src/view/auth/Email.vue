@@ -1,8 +1,9 @@
 <template>
   <div class="container">
   <div class="row h-100 justify-content-center align-items-center">
+
     <form class="col-md-4" @submit.prevent="resetPassword">
-      <div class="alert alert-danger" v-if="errors">{{errors}}</div>
+       <Errors/>
       <div class="alert alert-success" v-if="message">{{message}}</div>
       <div class="card">
         <div class="card-header">Forgot Password</div>
@@ -22,7 +23,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Errors from '../../components/Errors'
 export default {
+    components:{Errors},
     data(){
         return{
             email: ''

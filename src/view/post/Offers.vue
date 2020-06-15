@@ -42,7 +42,7 @@
                 </ol>
                 <div class="carousel-inner" role="listbox">
                   <div class="carousel-item"  v-for="(image, index) in offer.images" :key="image.id" :class="{active : index == 0}">
-                    <img class="d-block img-fluid" :src="baseUrl + image.photo_url" alt="First slide" style="width:100%">
+                    <img class="d-block img-fluid" :src="baseUrl + image.photo_url" alt="First slide" style="width:100%; height: 250px">
                   </div>
                 </div>
                 <a class="carousel-control-prev" :href="'#offer-'+offer.id" role="button" data-slide="prev">
@@ -61,8 +61,8 @@
                 <h5>{{offer.price}}</h5>
                 <p class="card-text">{{offer.description}}</p>
               </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+              <div class="card-footer" v-if="offer.user">
+                <small class="text-muted">{{offer.user.username}}</small>
               </div>
             </div>
           </div>

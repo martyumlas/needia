@@ -5,16 +5,22 @@
 
         <h1 class="my-4"></h1>
         <div class="list-group">
-          <router-link to="/profile" class="list-group-item">My Offers</router-link>
-          <router-link to="/my-needs" class="list-group-item">My Needs</router-link>
+          <router-link to="/profile" class="list-group-item" @click.native="setPostType(1)">My Offers</router-link>
+          <router-link to="/my-needs" class="list-group-item" @click.native="setPostType(2)">My Needs</router-link>
           <router-link to="/create-offer" class="list-group-item" @click.native="setPostType(1)">Create Offer</router-link>
           <router-link to="/create-need" class="list-group-item" @click.native="setPostType(2)">Create Need</router-link>
-          <router-link to="#" class="list-group-item">Edit Profile</router-link>
+          <router-link to="/edit-profile" class="list-group-item" @click.native='getUser'>Edit Profile</router-link>
         </div>
 
       </div>
 
-      <div class="col-lg-9 my-5">
+      <div class="col-lg-9 mb-5 mt-4" >
+        <div class="alert alert-success" v-if="message">{{message}}
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close" @click="clearMessage">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <Errors/>
         <router-view></router-view>
       </div>
 
@@ -23,11 +29,27 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import Errors from '../../components/Errors'
 export default {
+  computed:mapGetters(['message', 'user']),
+  components:{Errors},
   methods:{
     setPostType(id){
       this.$store.commit('setPostType', id)
+      this.$store.dispatch('getUsersPost', {id : id})
+      this.$store.commit('setPost',[])
+        this.$store.commit('isEditing', false)
+    },
+    clearMessage(){
+      this.$store.commit('setMessage', '')
+    },
+    getUser(){
+      this.$store.dispatch('getUser', this.user.id)
     }
+  },
+  mounted(){
+    // this.$store.commit('setMessage', '')
   }
 }
 </script>
