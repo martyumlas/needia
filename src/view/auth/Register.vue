@@ -8,7 +8,7 @@
         <div class="card-header">Register</div>
         <div class="card-body">
            <div class="form-group">
-              <select id="fuel" class="form-control" v-model="account_type">
+              <select id="fuel" class="form-control" v-model="account_type" required>
                 <option value="" selected>Account Type</option>
                 <option value="1">Personal</option>
                 <option value="2">Business</option>

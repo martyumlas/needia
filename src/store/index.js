@@ -19,8 +19,8 @@ const store = new Vuex.Store({
         isLoggedIn: false,
         message: '',
         errors: '',
-      //  baseUrl : 'https://needia.demo.thinkbitsolutions.com/',
-        baseUrl : 'http://localhost:6600/',
+       baseUrl : 'https://needia.demo.thinkbitsolutions.com/',
+        // baseUrl : 'http://localhost:6600/',
         updateUser: ''
 
     },
@@ -41,6 +41,7 @@ const store = new Vuex.Store({
                 commit('setMessage', res.data.message)
             } catch (error) {
                commit('setErrors', error.response.data.errors);
+               console.log(error.response )
             }
         },
         async login({commit}, payload)
@@ -60,6 +61,7 @@ const store = new Vuex.Store({
 
             } catch (error) {
                commit('setErrors', error.response.data.errors);
+               console.log(error.response )
             }
         },
         logout({commit}){
@@ -115,6 +117,28 @@ const store = new Vuex.Store({
                 commit('setUpdateUser', res.data.user)
 
             } catch (error) {
+                commit('setErrors', error.response.data.errors);
+            }
+        },
+        async updatePassword({commit,state}, payload){
+            commit('setMessage', '')
+            commit('setErrors', '')
+            try {
+                let form = new FormData
+
+                Object.entries(payload).forEach(([key, value]) =>{
+                    form.append(key, value)
+                })
+
+                form.append('_method', 'PATCH')
+
+                const res = await axios.post('api/user/' + state.user.id + '/update-password', form)
+                commit('setMessage', res.data.message)
+                if(res.status == 200){
+                    commit('setPassword', payload.password)
+                }
+            } catch (error) {
+                console.log(error.response.status)
                 commit('setErrors', error.response.data.errors);
             }
         }

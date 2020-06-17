@@ -10,6 +10,9 @@
           <router-link to="/create-offer" class="list-group-item" @click.native="setPostType(1)">Create Offer</router-link>
           <router-link to="/create-need" class="list-group-item" @click.native="setPostType(2)">Create Need</router-link>
           <router-link to="/edit-profile" class="list-group-item" @click.native='getUser'>Edit Profile</router-link>
+          <router-link to="/saved-offers" class="list-group-item"  @click.native="setPostTypeBookmarks(1)">Saved Offers</router-link>
+          <router-link to="/saved-needs" class="list-group-item" @click.native="setPostTypeBookmarks(2)">Saved Needs</router-link>
+          <router-link to="/update-password" class="list-group-item">Update Password</router-link>
         </div>
 
       </div>
@@ -46,6 +49,9 @@ export default {
     },
     getUser(){
       this.$store.dispatch('getUser', this.user.id)
+    },
+    setPostTypeBookmarks(id){
+       this.$store.commit('setPostType', id)
     }
   },
   mounted(){

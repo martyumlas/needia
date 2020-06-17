@@ -2,27 +2,30 @@ import axios from 'axios'
 import router from '../../router'
 const post = {
     state:{
-        offers:[],
-        needs:[],
+        // offers:[],
+        // needs:[],
         postType: '',
         usersPost: [],
         post: '',
-        isEditing: false
+        isEditing: false,
+        posts:[]
     },
     mutations:{
-        setOffers:(state, offers) => state.offers = offers,
-        setNeeds:(state, needs) => state.needs = needs,
+        // setOffers:(state, offers) => state.offers = offers,
+        // setNeeds:(state, needs) => state.needs = needs,
         setPostType:(state, type) => state.postType = type,
         setUsersPost:(state, post) => state.usersPost = post,
         setPost:(state, post) => state.post = post,
-        isEditing:(state,status) => state.isEditing = status
+        isEditing:(state,status) => state.isEditing = status,
+
+        setPosts: (state, posts) => state.posts = posts
     },
     actions:{
         async getOffers({commit}){
             try {
                 const res = await axios.get('api/post-offers')
-
-                commit('setOffers', res.data)
+                commit('setPosts', res.data)
+                // console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -30,8 +33,8 @@ const post = {
         async getNeeds({commit}){
             try {
                 const res = await axios.get('api/post-needs')
-
-                commit('setNeeds', res.data)
+                commit('setPosts', res.data)
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -44,6 +47,8 @@ const post = {
                         is_published: payload.is_published
                     }
                 })
+
+                console.log(res.data)
 
                 commit('setUsersPost', res.data)
             } catch (error) {
@@ -71,6 +76,8 @@ const post = {
 
                 const res = await axios.post('api/post', form)
                 commit('setMessage', res.data.message)
+
+                console.log(res.data)
                 if(state.postType == 1){
                     router.push('/profile')
                     dispatch('getUsersPost', state.postType)
@@ -88,8 +95,6 @@ const post = {
             commit('setMessage', '')
             commit('setErrors', '')
             try {
-
-
 
                 let form = new FormData
                 Object.entries(payload.post).forEach(([key, value]) =>{
@@ -158,6 +163,7 @@ const post = {
                 const res = await axios.get('api/post/' + id)
 
                 commit('setPost', res.data)
+                commit('setTypeId', res.data.offer_need_type_id)
 
                 console.log(res.data)
 
@@ -165,7 +171,36 @@ const post = {
                 console.log(error)
             }
         },
+        async bookmark({commit, rootGetters, dispatch, state}, payload){
+            commit('setMessage', '')
+            try {
+                const res = await axios.post('api/post/' + payload.id + '/user/' + rootGetters.user.id + '/bookmark', {bookmark:  payload.bookmark})
+                console.log(res.data)
+                commit('setMessage', res.data.message)
+                if(state.postType == 1){
+                    router.push('/saved-offers')
+                }else{
+                    router.push('/saved-needs')
+                }
+                dispatch('getBookmarkedPosts')
 
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async getBookmarkedPosts({commit, rootGetters}, id){
+            try {
+                const res = await axios.get('api/user/'+ rootGetters.user.id +'/post-bookmarks', {
+                    params:{
+                        post_type : id
+                    }
+                })
+                commit('setPosts', res.data)
+                console.log(res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
     },
     getters:{
         offers: (state) => state.offers,
@@ -173,7 +208,9 @@ const post = {
         postType: (state) => state.postType,
         usersPost: (state) => state.usersPost,
         post: (state) => state.post,
-        isEditing : (state) => state.isEditing
+        isEditing : (state) => state.isEditing,
+
+        posts: (state) => state.posts
     }
 }
 

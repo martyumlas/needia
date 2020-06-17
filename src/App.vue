@@ -4,7 +4,7 @@
     <Navbar/>
 
 
-      <router-view></router-view>
+    <router-view></router-view>
 
   <!-- Footer -->
   <footer class="py-5 bg-dark fixed-bottom" style="margin-top:200px">
@@ -22,7 +22,7 @@ export default {
   name: 'App',
   components:{Navbar},
   mounted(){
-    this.$store.dispatch('getOffers')
+    // this.$store.dispatch('getOffers')
   }
 }
 </script>

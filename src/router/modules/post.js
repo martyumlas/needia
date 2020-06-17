@@ -1,5 +1,6 @@
 import Offers from '../../view/post/Offers'
 import Needs from '../../view/post/Needs'
+import Post from '../../view/post/Post'
 
 const post = [
     {
@@ -12,6 +13,13 @@ const post = [
         component: Needs,
         name: 'Needs'
     },
+    {
+        path : '/post/:id',
+        component: Post,
+        name: 'Post'
+    },
+
+
 
 ]
 

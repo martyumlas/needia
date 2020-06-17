@@ -1,17 +1,17 @@
 <template>
-  <Posts/>
+  <div>
+      <Posts/>
+  </div>
 </template>
 
 <script>
 import Posts from './Posts'
-import {mapActions} from 'vuex'
 export default {
-  components: {Posts},
-  methods:mapActions(['getOffers']),
-    mounted(){
-      this.getOffers();
-    }
+    components:{Posts},
 
+    mounted(){
+      this.$store.dispatch('getBookmarkedPosts', 2)
+    }
 }
 </script>
 

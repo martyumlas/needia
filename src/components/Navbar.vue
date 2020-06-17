@@ -28,7 +28,7 @@
                 {{user.username}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" to="profile">Profile</router-link>
+                <router-link class="dropdown-item" to="/profile">Profile</router-link>
                 <a class="dropdown-item" href="#" @click="handleLogout">Logout</a>
               </div>
             </li>

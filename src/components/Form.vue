@@ -8,9 +8,9 @@
          <div class="form-group">
                <input type="file" multiple @change="onFileChange" />
          </div>
-         <div  class="row">
-             <div class="row">
-                <div v-for="(image, key) in images" :key="key">
+         <div>
+             <div class="row" v-if="!isEditing">
+                <div v-for="(image, key) in images" :key="key" >
                     <button class="close" @click="removeFile( key )">
                         <span>&times;</span>
                     </button>

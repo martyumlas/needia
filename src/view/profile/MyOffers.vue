@@ -35,13 +35,15 @@
           </div>
           <div class="card-body">
             <h4 class="card-title">
-              <a href="#">{{offer.title}}</a>
+             <router-link :to="{name: 'Post', params:{id: offer.id}}">{{offer.title ? offer.title : offer.brand}}</router-link>
             </h4>
             <h5>{{offer.price}}</h5>
             <p class="card-text">{{offer.description}}</p>
           </div>
           <div class="card-footer">
             <small>{{offer.is_published == 1 ? 'Active' : 'Inactive'}}</small>
+            <small class="float-right" v-if="offer.is_expired == 1">{{'Expired'}}</small>
+            <small class="float-right" v-if="offer.is_expired  == 0">{{offer.expiration_date}}</small>
           </div>
         </div>
       </div>
