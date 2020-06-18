@@ -25,7 +25,6 @@ const post = {
             try {
                 const res = await axios.get('api/post-offers')
                 commit('setPosts', res.data)
-                // console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -34,7 +33,7 @@ const post = {
             try {
                 const res = await axios.get('api/post-needs')
                 commit('setPosts', res.data)
-                console.log(res.data)
+
             } catch (error) {
                 console.log(error)
             }
@@ -48,7 +47,7 @@ const post = {
                     }
                 })
 
-                console.log(res.data)
+
 
                 commit('setUsersPost', res.data)
             } catch (error) {
@@ -77,7 +76,7 @@ const post = {
                 const res = await axios.post('api/post', form)
                 commit('setMessage', res.data.message)
 
-                console.log(res.data)
+
                 if(state.postType == 1){
                     router.push('/profile')
                     dispatch('getUsersPost', state.postType)
@@ -110,18 +109,10 @@ const post = {
                     form.append('images[' + i + ']', file);
                 }
 
-                // for( var j = 0; j < payload.postImages.length; j++ ){
-                //     let file = payload.postImages[j];
-
-                //     form.append('images[' + j + ']', file);
-                // }
-
-
                 form.append('_method', 'PATCH')
                 form.delete('created_at')
                 form.delete('updated_at')
                 form.delete('user')
-                // form.delete('images')
                 form.delete('category')
                 form.delete('sub_category')
 
@@ -178,12 +169,13 @@ const post = {
                 console.log(res.data)
                 commit('setMessage', res.data.message)
                 if(state.postType == 1){
-                    router.push('/saved-offers')
+                    // router.push('/saved-offers')
                 }else{
-                    router.push('/saved-needs')
+                    // router.push('/saved-needs')
                 }
                 dispatch('getBookmarkedPosts')
-
+                dispatch('getPost', payload.id)
+                console.log(res.data.message)
             } catch (error) {
                 console.log(error)
             }
@@ -196,6 +188,7 @@ const post = {
                     }
                 })
                 commit('setPosts', res.data)
+
                 console.log(res.data)
             } catch (error) {
                 console.log(error)

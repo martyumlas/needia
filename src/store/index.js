@@ -19,8 +19,8 @@ const store = new Vuex.Store({
         isLoggedIn: false,
         message: '',
         errors: '',
-       baseUrl : 'https://needia.demo.thinkbitsolutions.com/',
-        // baseUrl : 'http://localhost:6600/',
+    //    baseUrl : 'https://needia.demo.thinkbitsolutions.com/',
+        baseUrl : 'http://localhost:6600/',
         updateUser: ''
 
     },

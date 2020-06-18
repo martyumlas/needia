@@ -4,14 +4,6 @@
 
       <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts" :key="post.id">
         <div class="card h-100">
-          <!-- <span  >
-            <i class="material-icons" @click="handleBookmark(post.id)"  v-for="bookmark in post.bookmarks" :key="bookmark.id" :class="{'text-danger' : bookmark}">bookmark</i>
-        {{   bookmark}}
-            </span> -->
-
-          <span @click="handleBookmark(post)" >
-            <i class="material-icons" > bookmark</i>
-          </span>
             <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
             <ol class="carousel-indicators">
               <li :data-target="'#post-'+post.id" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>

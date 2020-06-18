@@ -5,28 +5,31 @@
     <div class="row">
 
       <div class="col-lg-12 mx-auto">
-
         <div class="card mt-4">
-            <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
-          <ol class="carousel-indicators">
-               <li data-target="'#carouselExampleIndicators" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>
-          </ol>
-          <div class="carousel-inner" role="listbox">
-            <div class="carousel-item"  v-for="(image, index) in post.images" :key="image.id" :class="{active : index == 0}">
-              <img class="d-block img-fluid" :src="baseUrl + image.photo_url" alt="First slide" style="width:100%; height:500px" >
+          <span v-if="post.user.id !== user.id">
+            <span class="d-flex justify-content-end"  v-for="bookmark in post.bookmarks" :key="bookmark.id">
+              <i class="material-icons" :class="{'text-danger' : bookmark.user_id === user.id ?  bookmark.is_bookmarked : ''}" @click="handleBookmark(post)">bookmark</i>
+            </span>
+          </span>
+
+          <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="'#carouselExampleIndicators" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+              <div class="carousel-item"  v-for="(image, index) in post.images" :key="image.id" :class="{active : index == 0}">
+                <img class="d-block img-fluid" :src="baseUrl + image.photo_url" alt="First slide" style="width:100%; height:500px" >
+              </div>
             </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-
-
           <div class="card-body">
             <h3 class="card-title">{{post.title}}</h3>
             <h4>{{post.price}}</h4>
@@ -67,7 +70,31 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    computed:mapGetters(['post', 'baseUrl']),
+    computed:mapGetters(['post', 'baseUrl', 'user']),
+    data(){
+      return {
+      }
+    },
+    methods:{
+      handleBookmark(post){
+        if(post.bookmarks){
+          post.bookmarks.filter(bookmark => {
+            if(bookmark.user_id == this.user.id){
+              console.log(bookmark)
+              this.$store.dispatch('bookmark', {
+                id: post.id,
+                bookmark: !bookmark.is_bookmarked
+              })
+            }
+          })
+        }else{
+           this.$store.dispatch('bookmark', {
+            id: post.id,
+            bookmark: 1
+          })
+        }
+      }
+    },
     mounted(){
         this.$store.dispatch('getPost', this.$route.params.id)
     }
