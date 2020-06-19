@@ -7,6 +7,7 @@ import EditProfile from '../../view/profile/EditProfile'
 import UpdatePassword from '../../view/profile/UpdatePassword'
 import SavedOffers from '../../view/profile/SavedOffers'
 import SavedNeeds from '../../view/profile/SavedNeeds'
+import UserProfile from '../../view/profile/UserProfile'
 
 import Form from '../../components/Form'
 
@@ -65,6 +66,14 @@ const profile = [
                 name: 'SavedNeeds'
             },
         ]
+    },
+    {
+        path: '/user-profile/:id',
+        component: UserProfile,
+        name: 'UserProfile',
+        meta: {
+            requiresAuth: true
+          },
     }
 ]
 

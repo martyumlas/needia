@@ -1,15 +1,19 @@
 <template>
-<div >
+  <div>
     <div class="row">
-      <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts" :key="post.id">
+      <div class="col-lg-4 col-md-6 mb-4" v-for="post in usersPost" :key="post.id">
         <div class="card h-100">
+          <div class="card-header">
+            <i class="material-icons" @click="handleEdit(post.id)">edit</i>
+            <button class="close" @click="handleDelete(post.id)">&times;</button>
+          </div>
             <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
             <ol class="carousel-indicators">
               <li :data-target="'#post-'+post.id" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>
             </ol>
             <div class="carousel-inner" role="listbox">
               <div class="carousel-item"  v-for="(image, index) in post.images" :key="image.id" :class="{active : index == 0}">
-                <img class="d-block img-fluid" :src="baseUrl + image.photo_url" alt="First slide" style="width:100%; height: 250px">
+                <img class="d-block img-fluid" :src="baseUrl + image.photo_url" alt="First slide" style="width:100%;height: 250px">
               </div>
             </div>
             <a class="carousel-control-prev" :href="'#post-'+post.id" role="button" data-slide="prev">
@@ -23,59 +27,41 @@
           </div>
           <div class="card-body">
             <h4 class="card-title">
-              <router-link :to="{name: 'Post', params:{id: post.id}}">{{post.title ? post.title : post.brand}}</router-link>
+             <router-link :to="{name: 'Post', params:{id: post.id}}">{{post.title ? post.title : post.brand}}</router-link>
             </h4>
             <h5>{{post.price}}</h5>
             <p class="card-text">{{post.description}}</p>
           </div>
-          <div class="card-footer" v-if="post.user">
-            <small class="text-muted">{{post.user.username}}</small>
+          <div class="card-footer">
+            <small>{{post.is_published == 1 ? 'Active' : 'Inactive'}}</small>
+            <small class="float-right" v-if="post.is_expired == 1">{{'Expired'}}</small>
+            <small class="float-right" v-if="post.is_expired  == 0">{{post.expiration_date}}</small>
           </div>
         </div>
       </div>
-
     </div>
-</div>
-
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
 import { mapGetters } from 'vuex'
 export default {
-    data(){
-      return {
-        baseUrl : axios.defaults.baseURL,
-        bookmark: ''
-      }
-    },
-    computed:{...mapGetters(['posts','user']),
-      bookmarks(){
-        return this.posts.bookmarks.filter(book => console.log(book))
-      }
-    },
+
+    computed:mapGetters(['usersPost', 'baseUrl']),
     methods:{
-      handleBookmark(post){
-        console.log(post)
-        post.bookmarks.filter(bookmark => {
-          this.$store.dispatch('bookmark', {
-            id: post.id,
-            bookmark: !bookmark.is_bookmarked
-          })
-        })
+      handleDelete(id){
+        let result = confirm('Are you  sure?')
 
-        if(!post.bookmarks.length){
-          this.$store.dispatch('bookmark', {
-            id: post.id,
-            bookmark: 1
-          })
+        if(result){
+          this.$store.dispatch('deletePost', id)
         }
-
-
-
-      }
+      },
+      handleEdit(id){
+        this.$store.dispatch('getPost', id)
+        this.$store.commit('isEditing', true)
+        this.$router.push('/form')
+      },
     },
-
 }
 </script>
 

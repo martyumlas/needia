@@ -21,11 +21,13 @@ const store = new Vuex.Store({
         errors: '',
     //    baseUrl : 'https://needia.demo.thinkbitsolutions.com/',
         baseUrl : 'http://localhost:6600/',
-        updateUser: ''
+        updateUser: '',
+        profile: ''
 
     },
     mutations:{
         setUser : (state, user) => state.user = user,
+        setProfile : (state, user) => state.profile = user,
         isLoggedIn : (state, status) => state.isLoggedIn = status,
         setMessage: (state, message) => state.message = message,
         setErrors: (state, errors) => state.errors = errors,
@@ -50,6 +52,7 @@ const store = new Vuex.Store({
             commit('setMessage', '')
             try {
                 const res = await axios.post('api/login', payload)
+                console.log(res.data)
                 if(res.data.user.email_verified_at == null){
                     commit('setErrors', res.data.message)
                     console.log(res.data)
@@ -83,7 +86,6 @@ const store = new Vuex.Store({
         async getUser({commit, state}){
             try {
                 const res = await axios.get('api/user/' + state.user.id)
-                console.log(res.data),
                 commit('setUpdateUser', res.data)
             } catch (error) {
                 commit('setErrors', error.response.data.errors);
@@ -109,12 +111,33 @@ const store = new Vuex.Store({
                 form.delete('photo_url')
                 form.delete('fcm_notification_key')
 
+                // let days = [
+                //     {
+                //         day: 'monday',
+                //         opening: '7:00',
+                //         closing: '7:00'
+                //     },
+                //     {
+                //         day: 'tuesday',
+                //         opening: '7:00',
+                //         closing: '7:00'
+                //     },
+                //     {
+                //         day: 'wednesday',
+                //         opening: '8:00',
+                //         closing: '8:00'
+                //     },
+                // ]
 
+                // var json_arr = JSON.stringify(days);
+                // form.append('days', json_arr)
+                form.append('_method','PATCH')
 
                 const res = await axios.post('api/user/' + payload.user.id, form)
                 commit('setMessage', res.data.message)
                 commit('setUser', res.data.user)
                 commit('setUpdateUser', res.data.user)
+                console.log(res.data)
 
             } catch (error) {
                 commit('setErrors', error.response.data.errors);
@@ -141,6 +164,23 @@ const store = new Vuex.Store({
                 console.log(error.response.status)
                 commit('setErrors', error.response.data.errors);
             }
+        },
+        async getUserProfile({commit}, id){
+            try {
+                const res = await axios.get('api/user/' + id)
+                commit('setProfile', res.data)
+            } catch (error) {
+               console.log(error)
+            }
+        },
+        async bookmarkUser({dispatch, state}, payload){
+            try {
+                const res = await axios.post('api/user/'+state.user.id+'/bookmark', payload)
+                console.log(res.data)
+                dispatch('getUserProfile', payload.user_id)
+            } catch (error) {
+                console.log(error)
+            }
         }
     },
     getters:{
@@ -150,7 +190,8 @@ const store = new Vuex.Store({
         errors : (state) => state.errors,
         password : (state) => state.password,
         baseUrl : (state) => state.baseUrl,
-        updateUser: (state) => state.updateUser
+        updateUser: (state) => state.updateUser,
+        profile: (state) => state.profile
     }
 })
 

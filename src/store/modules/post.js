@@ -156,8 +156,6 @@ const post = {
                 commit('setPost', res.data)
                 commit('setTypeId', res.data.offer_need_type_id)
 
-                console.log(res.data)
-
             } catch (error) {
                 console.log(error)
             }
@@ -188,8 +186,6 @@ const post = {
                     }
                 })
                 commit('setPosts', res.data)
-
-                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }

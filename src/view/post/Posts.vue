@@ -62,7 +62,8 @@
                 <p class="card-text">{{post.description}}</p>
               </div>
               <div class="card-footer" v-if="post.user">
-                <small class="text-muted">{{post.user.username}}</small>
+               <router-link :to="{name: 'UserProfile', params: {id : post.user.id}}"> <small class="text-muted">{{post.user.username}}</small></router-link>
+               <p>{{post.expiration_date}}</p>
               </div>
             </div>
           </div>
@@ -79,47 +80,11 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Categories from '../../components/Categories'
 import { mapGetters } from 'vuex'
 export default {
     components:{Categories},
-    data(){
-      return {
-        baseUrl : axios.defaults.baseURL,
-        bookmark: ''
-      }
-    },
-    computed:{...mapGetters(['posts','user']),
-      bookmarks(){
-        return this.posts.bookmarks.filter(book => console.log(book))
-      }
-    },
-    methods:{
-      handleBookmark(post){
-        console.log(post)
-        post.bookmarks.filter(bookmark => {
-          this.$store.dispatch('bookmark', {
-            id: post.id,
-            bookmark: !bookmark.is_bookmarked
-          })
-        })
-
-        if(!post.bookmarks.length){
-          this.$store.dispatch('bookmark', {
-            id: post.id,
-            bookmark: 1
-          })
-        }
-
-
-
-      }
-    },
-
-    mounted(){
-
-    }
+    computed:mapGetters(['posts','user', 'baseUrl']),
 }
 </script>
 

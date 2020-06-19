@@ -6,10 +6,14 @@
 
       <div class="col-lg-12 mx-auto">
         <div class="card mt-4">
-          <span v-if="post.user.id !== user.id">
-            <span class="d-flex justify-content-end"  v-for="bookmark in post.bookmarks" :key="bookmark.id">
+          <span v-if="post.user.id !== user.id" >
+            <span class="d-flex justify-content-end" v-if="!post.bookmarks.length">
+              <i class="material-icons" @click="handleBookmark(post)">bookmark</i>
+            </span>
+            <span class="d-flex justify-content-end"  v-for="bookmark in post.bookmarks" :key="bookmark.id" v-else>
               <i class="material-icons" :class="{'text-danger' : bookmark.user_id === user.id ?  bookmark.is_bookmarked : ''}" @click="handleBookmark(post)">bookmark</i>
             </span>
+
           </span>
 
           <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
@@ -77,10 +81,9 @@ export default {
     },
     methods:{
       handleBookmark(post){
-        if(post.bookmarks){
+        if(post.bookmarks.length){
           post.bookmarks.filter(bookmark => {
             if(bookmark.user_id == this.user.id){
-              console.log(bookmark)
               this.$store.dispatch('bookmark', {
                 id: post.id,
                 bookmark: !bookmark.is_bookmarked
@@ -101,6 +104,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+i{
+  cursor: pointer;
+}
 </style>
