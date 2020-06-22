@@ -1,7 +1,5 @@
 <template>
   <div >
-
-
     <form @submit.prevent="handleUpdatePassword">
       <div class="form-group">
         <label for="current_password">Current Password</label>
@@ -15,10 +13,8 @@
         <label for="password_confirmation">Confirm Password</label>
         <input type="password" class="form-control" id="password_confirmation" placeholder="Date of Birth" v-model="password_confirmation">
       </div>
-
       <button type="submit" class="btn btn-primary float-right">Update Profile</button>
     </form>
-
   </div>
 </template>
 

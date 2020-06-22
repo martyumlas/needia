@@ -7,7 +7,6 @@
        <img :src="profile.photo_url ? baseUrl + profile.photo_url : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT7umTPgrLSV5xtD74U98xBYm2wQEi7RLNyotXacUjd1c3fhJyS&usqp=CAU'" alt="" class="rounded-circle" style="height: 200px">
       <h3 class="text-center pt-3">{{profile.username}}</h3>
     </div>
-
   </div>
 </template>
 

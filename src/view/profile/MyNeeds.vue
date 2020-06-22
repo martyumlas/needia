@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="form-group">
         <label for="categories">Category</label>
         <select id="categories" class="form-control"  required v-model="selectedFilter" @change="filterPost">

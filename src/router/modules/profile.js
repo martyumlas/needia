@@ -20,10 +20,6 @@ const profile = [
             requiresAuth: true
           },
             children: [
-            // {
-            //     path: '/profile',
-            //     component: MyProfile
-            // },
             {
                 path: '/profile',
                 component: MyOffers

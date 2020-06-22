@@ -99,7 +99,7 @@ export default {
       }
     },
     mounted(){
-        this.$store.dispatch('getPost', this.$route.params.id)
+      this.$store.dispatch('getPost', this.$route.params.id)
     }
 }
 </script>
