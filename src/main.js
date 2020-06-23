@@ -3,10 +3,9 @@ import App from './App.vue'
 import store from './store/index'
 import axios from 'axios'
 import router from './router/index'
-
 // Vue.config.productionTip = false
-axios.defaults.baseURL = 'https://needia.demo.thinkbitsolutions.com/'
-//axios.defaults.baseURL = 'http://localhost:6600/'
+// axios.defaults.baseURL = 'https://needia.demo.thinkbitsolutions.com/'
+axios.defaults.baseURL = 'http://localhost:6600/'
 var email = store.getters.user.email;
 var password = store.getters.password;
 var basicAuth = 'Basic ' + btoa(email + ':' + password);
