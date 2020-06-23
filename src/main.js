@@ -3,6 +3,8 @@ import App from './App.vue'
 import store from './store/index'
 import axios from 'axios'
 import router from './router/index'
+import './firebase'
+
 // Vue.config.productionTip = false
 // axios.defaults.baseURL = 'https://needia.demo.thinkbitsolutions.com/'
 axios.defaults.baseURL = 'http://localhost:6600/'
