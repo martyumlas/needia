@@ -5,13 +5,14 @@ import axios from 'axios'
 import router from '../router/index'
 import createPersistedState from "vuex-persistedstate";
 import utility from './modules/utility'
+import chat from './modules/chat'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     plugins: [createPersistedState()],
     modules:{
-        post, utility
+        post, utility, chat
     },
     state:{
         user: '',

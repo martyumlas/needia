@@ -41,6 +41,7 @@
             <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
             4.0 stars
           </div>
+          <button class="btn btn-primary" v-if="post.user.id !== user.id" @click="handleSendMessage">Send Message</button>
         </div>
         <!-- /.card -->
 
@@ -96,6 +97,11 @@ export default {
             bookmark: 1
           })
         }
+      },
+      handleSendMessage(){
+
+        this.$store.commit('setChatPost', this.post)
+        this.$router.push('/chat')
       }
     },
     mounted(){

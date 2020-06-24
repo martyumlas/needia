@@ -6,6 +6,7 @@ import Login from '../view/auth/Login'
 import Email from '../view/auth/Email'
 import store from '../store'
 import profile from './modules/profile'
+import Messages from '../components/Messages'
 
 Vue.use(VueRouter)
 
@@ -43,6 +44,14 @@ const router = new VueRouter({
             path: '/forgot-password',
             component: Email,
             name: 'Forgot Password'
+        },
+        {
+            path : '/messages',
+            component: Messages,
+            name: 'Messages',
+            meta: {
+                requiresAuth: true
+              },
         },
     ]
 })
