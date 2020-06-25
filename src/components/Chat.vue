@@ -11,6 +11,7 @@
           <div class="feed" ref="feed">
             <ul>
               <li v-for="message in postMessages" :key="message.id" :class="`message${message.from == user.id ? ' sent' : ' received'}`">
+                  <input type="hidden">
                   <div class="text">
                     {{message.text}}
                   </div>
@@ -29,15 +30,11 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    props:['post'],
-    computed:mapGetters(['postMessages', 'postChat', 'user']),
-    mounted(){
-         this.$store.dispatch('getPostMessages', this.postChat.id)
-         this.scrollToBottom()
-    },
+    computed:mapGetters(['postMessages', 'postChat', 'user', 'isReply', 'contact_id']),
+
     data(){
         return {
-            text:''
+            text:'',
         }
     },
     methods:{
@@ -47,7 +44,10 @@ export default {
                 return;
             }
 
-            this.$store.dispatch('sendMessage', this.text)
+            this.$store.dispatch('sendMessage', {
+                text : this.text,
+                contact_id : this.isReply ? this.contact_id :  this.postChat.user.id
+            })
             this.text = ''
         },
         scrollToBottom(){
@@ -58,7 +58,15 @@ export default {
             }, 50);
         },
 
-    }
+    },
+     mounted(){
+         this.$store.dispatch('setContactId')
+         this.$store.dispatch('getPostMessages', {
+             id: this.postChat.id,
+             contact_id : this.isReply ? this.contact_id :  this.postChat.user.id
+         })
+         this.scrollToBottom()
+    },
 }
 </script>
 
