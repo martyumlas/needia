@@ -99,9 +99,8 @@ export default {
         }
       },
       handleSendMessage(){
-
-        this.$store.commit('setChatPost', this.post)
-        this.$store.commit('isReplying', false)
+        this.$store.commit('reply', false)
+        this.$store.commit('contact', '')
         this.$router.push('/chat')
       }
     },
