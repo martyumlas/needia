@@ -101,7 +101,7 @@ export default {
       handleSendMessage(){
 
         this.$store.commit('setChatPost', this.post)
-         this.$store.commit('setIsReply' , false)
+        this.$store.commit('isReplying', false)
         this.$router.push('/chat')
       }
     },

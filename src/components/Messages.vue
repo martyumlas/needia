@@ -1,26 +1,27 @@
 <template>
- <div>
-    <div class="card card-body text-center" v-for="message in messages" :key="message.id" @click="handleMessages(message)" style="cursor:pointer">
-        <h5 class="card-title">{{message.from.id === user.id ? message.to.username: message.from.username}}</h5>
-    </div>
+   <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+
+        <h1 class="my-4"></h1>
+        <div class="list-group">
+          <router-link to="/messages" class="list-group-item">My Offers Messages</router-link>
+          <router-link to="/need-messages" class="list-group-item">My Needs Messages</router-link>
+        </div>
+
+      </div>
+
+      <div class="col-lg-9 mb-5 mt-4" >
+        <router-view></router-view>
+      </div>
+
   </div>
+</div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
-    computed:mapGetters(['messages', 'user']),
-    methods:{
-        handleMessages(message){
-            this.$store.commit('setChatPost', message.post)
-            this.$router.push('/chat')
-            this.$store.commit('setIsReply' , true)
-        }
 
-    },
-    mounted(){
-        this.$store.dispatch('getMessages')
-    }
 }
 </script>
 

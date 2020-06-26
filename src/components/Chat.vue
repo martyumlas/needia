@@ -30,7 +30,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    computed:mapGetters(['postMessages', 'postChat', 'user', 'isReply', 'contact_id']),
+    computed:mapGetters(['postMessages', 'postChat', 'user', 'isReplying', 'contact_id']),
 
     data(){
         return {
@@ -44,9 +44,10 @@ export default {
                 return;
             }
 
+
             this.$store.dispatch('sendMessage', {
                 text : this.text,
-                contact_id : this.isReply ? this.contact_id :  this.postChat.user.id
+                contact_id :  this.isReplying ? this.contact_id :  this.postChat.user.id
             })
             this.text = ''
         },
@@ -60,10 +61,12 @@ export default {
 
     },
      mounted(){
-         this.$store.dispatch('setContactId')
+
+         console.log(this.contact_id)
+
          this.$store.dispatch('getPostMessages', {
              id: this.postChat.id,
-             contact_id : this.isReply ? this.contact_id :  this.postChat.user.id
+             contact_id : this.isReplying ? this.contact_id :  this.postChat.user.id
          })
          this.scrollToBottom()
     },

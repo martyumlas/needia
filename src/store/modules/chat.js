@@ -5,7 +5,7 @@ const chat = {
         postMessages : [],
         postChat: '',
         messages: '',
-        isReply: false,
+        isReplying: false,
         contact_id: ''
     },
     mutations: {
@@ -13,8 +13,8 @@ const chat = {
         setPostMessages: (state, messages) => state.postMessages = messages,
         addPostMessage: (state, message) => state.postMessages.push(message),
         setMessages: (state, messages) => state.messages = messages,
-        setIsReply : (state, status) => state.isReply = status,
-        setContactId: (state, contact) => state.contact_id = contact
+        isReplying: (state, status) => state.isReplying = status,
+        contact_id : (state, contact_id) => state.contact_id = contact_id
 
     },
     actions:{
@@ -46,27 +46,26 @@ const chat = {
                 console.log(error)
             }
         },
-        async getMessages({commit, rootGetters}){
+        async getMessages({commit, rootGetters}, payload){
             try {
-                const res = await axios.get('api/user/' + rootGetters.user.id + '/messages');
+                const res = await axios.get('api/user/' + rootGetters.user.id + '/messages',{
+                    params:{
+                        post_type : payload.post_type
+                    }
+                });
                 commit('setMessages', res.data)
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
         },
-        setContactId({state, rootGetters, commit}){
-          state.postMessages.filter(messages => {
-                let contact = messages.from !== rootGetters.user.id ? messages.from: messages.to !== rootGetters.user.id ? messages.to : messages.from
-                commit('setContactId', contact)
-          })
-        }
     },
     getters:{
         postMessages : (state) => state.postMessages,
         postChat : (state) => state.postChat,
         messages: (state) =>state.messages,
-        isReply: (state) => state.isReply,
-        contact_id : (state) => state.contact_id
+        isReplying: (state) => state.isReplying,
+        contact_id: (state) => state.contact_id,
 
     }
 }

@@ -7,6 +7,8 @@ import Email from '../view/auth/Email'
 import store from '../store'
 import profile from './modules/profile'
 import Messages from '../components/Messages'
+import OfferMessages from '../view/messages/OfferMessages'
+import NeedMessages from '../view/messages/NeedMessages'
 
 Vue.use(VueRouter)
 
@@ -52,6 +54,18 @@ const router = new VueRouter({
             meta: {
                 requiresAuth: true
               },
+            children:[
+                {
+                    path: '/messages',
+                    component: OfferMessages,
+                    name: 'OfferMessages'
+                },
+                {
+                    path: '/need-messages',
+                    component: NeedMessages,
+                    name: 'NeedMessages'
+                },
+            ]
         },
     ]
 })
