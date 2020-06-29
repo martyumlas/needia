@@ -6,6 +6,7 @@ import router from '../router/index'
 import createPersistedState from "vuex-persistedstate";
 import utility from './modules/utility'
 import chat from './modules/chat'
+import messaging from '../firebase'
 
 Vue.use(Vuex)
 
@@ -21,9 +22,10 @@ const store = new Vuex.Store({
         message: '',
         errors: '',
         // baseUrl : 'https://needia.demo.thinkbitsolutions.com/',
-       baseUrl : 'http://localhost:6600/',
+        baseUrl : 'http://localhost:6600/',
         updateUser: '',
-        profile: ''
+        profile: '',
+        token: ''
 
     },
     mutations:{
@@ -33,7 +35,9 @@ const store = new Vuex.Store({
         setMessage: (state, message) => state.message = message,
         setErrors: (state, errors) => state.errors = errors,
         setPassword: (state, password) => state.password = password,
-        setUpdateUser:(state, user) => state.updateUser =  user
+        setUpdateUser:(state, user) => state.updateUser =  user,
+        setToken : (state, token) => state.token = token,
+        setBaseUrl : (state, url) => state.baseUrl =url
     },
     actions:{
         async register({commit}, payload)
@@ -47,7 +51,7 @@ const store = new Vuex.Store({
                console.log(error.response )
             }
         },
-        async login({commit}, payload)
+        async login({commit, dispatch}, payload)
         {
             commit('setErrors', '')
             commit('setMessage', '')
@@ -61,17 +65,30 @@ const store = new Vuex.Store({
                     commit('setUser', res.data.user)
                     commit('isLoggedIn', true)
                     router.push('/')
+
+                    dispatch('getToken')
+
+                    dispatch('registerToken')
+
+
+
                 }
+
+
 
             } catch (error) {
                commit('setErrors', error.response.data.errors);
-               console.log(error.response )
+               console.log(error )
             }
         },
-        logout({commit}){
+        logout({commit, dispatch}){
+
+            dispatch('removeToken')
             commit('isLoggedIn', false)
-            commit('setUser', '')
+            commit('setUser','')
+            commit('setToken', '')
             router.push('/')
+
         },
         async resetPassword({commit}, payload){
             commit('setErrors', '')
@@ -182,7 +199,52 @@ const store = new Vuex.Store({
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+         getToken({commit}){
+             messaging.requestPermission().then(function(){
+                console.log('have permission')
+                return messaging.getToken()
+            }).then(function(token){
+                console.log(token)
+                commit('setToken', token)
+            })
+            .catch(function(err){
+                console.log(err)
+            })
+
+
+            messaging.onMessage(function(payload){
+                console.log('onMessage', payload)
+            })
+        },
+        async registerToken({rootGetters, state, dispatch}){
+            try {
+                const res = await axios.post('api/users/'+rootGetters.user.id+'/fcm_registration_tokens',{
+                    registration_id : state.token
+                })
+
+                console.log(res.data)
+            } catch (error) {
+                console.log(error)
+
+                dispatch('registerToken')
+            }
+        },
+        async removeToken({rootGetters, state, }){
+            try {
+                const res = await axios.delete('api/users/'+rootGetters.user.id+'/fcm_registration_tokens',{
+                    data:{
+                        registration_id : state.token
+                    }
+                })
+
+                console.log(res.data)
+            } catch (error) {
+                console.log(error)
+
+
+            }
+        },
     },
     getters:{
         user : (state) => state.user,

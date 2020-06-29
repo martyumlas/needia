@@ -23,6 +23,8 @@ export default {
   components:{Navbar},
   mounted(){
     // this.$store.dispatch('getOffers')
+    // this.$store.dispatch('getToken')
+    // this.$store.dispatch('registerToken')
   }
 }
 </script>

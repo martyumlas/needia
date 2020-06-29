@@ -24,7 +24,7 @@ const chat = {
                 })
 
                 commit('setPostMessages', res.data)
-                console.log(res.data)
+
             } catch (error) {
 
                 console.log(error)
@@ -37,6 +37,8 @@ const chat = {
                     contact_id : state.reply ? state.contact : rootGetters.post.user.id
                 })
                 commit('pushMessage', res.data.data)
+
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -49,7 +51,7 @@ const chat = {
                     }
                 })
                 commit('setMessages', res.data)
-                console.log(res.data)
+
             } catch (error) {
                 console.log(error)
             }

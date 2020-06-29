@@ -42,10 +42,14 @@ export default {
             }
             this.$store.dispatch('sendMessage', {text: this.text})
             this.text = ''
-        }
+        },
+      
     },
     mounted(){
         this.$store.dispatch('getPostMessages')
+
+
+
     }
 
 }
