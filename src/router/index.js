@@ -9,6 +9,7 @@ import profile from './modules/profile'
 import Messages from '../components/Messages'
 import OfferMessages from '../view/messages/OfferMessages'
 import NeedMessages from '../view/messages/NeedMessages'
+import PostThread from '../components/PostThread'
 
 Vue.use(VueRouter)
 
@@ -66,6 +67,14 @@ const router = new VueRouter({
                     name: 'NeedMessages'
                 },
             ]
+        },
+        {
+            path : '/open-thread',
+            component: PostThread,
+            name: 'PostThread',
+            meta: {
+                requiresAuth: true
+              },
         },
     ]
 })

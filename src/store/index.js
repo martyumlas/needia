@@ -68,7 +68,11 @@ const store = new Vuex.Store({
 
                     dispatch('getToken')
 
-                    dispatch('registerToken')
+                    setTimeout(() => {
+
+                        dispatch('registerToken')
+
+                    }, 10000);
 
 
 
@@ -217,7 +221,7 @@ const store = new Vuex.Store({
                 console.log('onMessage', payload)
             })
         },
-        async registerToken({rootGetters, state, dispatch}){
+        async registerToken({rootGetters, state}){
             try {
                 const res = await axios.post('api/users/'+rootGetters.user.id+'/fcm_registration_tokens',{
                     registration_id : state.token
@@ -227,7 +231,7 @@ const store = new Vuex.Store({
             } catch (error) {
                 console.log(error)
 
-                dispatch('registerToken')
+                // dispatch('registerToken')
             }
         },
         async removeToken({rootGetters, state, }){

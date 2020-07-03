@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
       <ul class="list-group">
           <li v-for="message in messages" :key='message.id' class="list-group-item" style="cursor:pointer" @click="openChat(message)">
               <img :src="baseUrl + message.post.images[0].photo_url" alt="" width="100" height="100">
@@ -7,13 +7,16 @@
                 {{message.from == user.id ? message.to.username : message.from.username}}
           </li>
       </ul>
+    <div class="text-center">
+    <button class="btn btn-primary">mark all as sold</button>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    computed:mapGetters(['messages', 'baseUrl', 'user']),
+    computed:mapGetters(['messages', 'baseUrl', 'user', 'initialMessage']),
     methods:{
         openChat(message){
             this.$store.commit('setPost', message.post)
@@ -21,6 +24,9 @@ export default {
             this.$store.commit('contact', message.post.user.id != this.user.id ? message.post.user.id : message.from.id)
             this.$router.push('/chat')
         }
+    },
+    mounted(){
+        
     }
 
 }

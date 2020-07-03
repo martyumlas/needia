@@ -46,9 +46,6 @@ const post = {
                         is_published: payload.is_published
                     }
                 })
-
-
-
                 commit('setUsersPost', res.data)
             } catch (error) {
                 console.log(error)
@@ -109,6 +106,8 @@ const post = {
                     form.append('images[' + i + ']', file);
                 }
 
+                form.delete('bookmarks')
+
                 form.append('_method', 'PATCH')
                 form.delete('created_at')
                 form.delete('updated_at')
@@ -147,7 +146,7 @@ const post = {
                 console.log(error)
             }
         },
-        async getPost({commit}, id){
+        async getPost({commit, dispatch}, id){
             commit('setMessage', '')
             commit('setErrors', '')
             try {
@@ -155,6 +154,8 @@ const post = {
 
                 commit('setPost', res.data)
                 commit('setTypeId', res.data.offer_need_type_id)
+
+                dispatch('postMessages')
 
             } catch (error) {
                 console.log(error)
@@ -186,6 +187,17 @@ const post = {
                     }
                 })
                 commit('setPosts', res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async postMessages({state, rootGetters, commit})
+        {
+            try {
+                const res = await axios.get('api/user/'+rootGetters.user.id+'/post/'+state.post.id+'/message')
+                commit('setMessages', res.data)
+
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
