@@ -41,6 +41,11 @@
             <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
             4.0 stars
           </div>
+          <button class="btn btn-primary" v-if="post.user.id !== user.id" @click="handleSendMessage">Send Message</button>
+           <!-- <ul>
+             <li v-for="message in messages" :key="message.id">{{message.length}}</li>
+           </ul> -->
+            <h2 @click='openThread' v-if="post.user.id === user.id"> {{messages.length}} active chat</h2>
         </div>
         <!-- /.card -->
 
@@ -74,7 +79,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    computed:mapGetters(['post', 'baseUrl', 'user']),
+    computed:mapGetters(['post', 'baseUrl', 'user','messages','baseUrl']),
     data(){
       return {
       }
@@ -96,10 +101,20 @@ export default {
             bookmark: 1
           })
         }
+      },
+      handleSendMessage(){
+        this.$store.commit('reply', false)
+        this.$store.commit('contact', '')
+        this.$router.push('/chat')
+      },
+      openThread(){
+         this.$router.push('/open-thread')
       }
     },
     mounted(){
       this.$store.dispatch('getPost', this.$route.params.id)
+      this.$store.dispatch('postMessages')
+
     }
 }
 </script>

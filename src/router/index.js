@@ -6,6 +6,10 @@ import Login from '../view/auth/Login'
 import Email from '../view/auth/Email'
 import store from '../store'
 import profile from './modules/profile'
+import Messages from '../components/Messages'
+import OfferMessages from '../view/messages/OfferMessages'
+import NeedMessages from '../view/messages/NeedMessages'
+import PostThread from '../components/PostThread'
 
 Vue.use(VueRouter)
 
@@ -43,6 +47,34 @@ const router = new VueRouter({
             path: '/forgot-password',
             component: Email,
             name: 'Forgot Password'
+        },
+        {
+            path : '/messages',
+            component: Messages,
+            name: 'Messages',
+            meta: {
+                requiresAuth: true
+              },
+            children:[
+                {
+                    path: '/messages',
+                    component: OfferMessages,
+                    name: 'OfferMessages'
+                },
+                {
+                    path: '/need-messages',
+                    component: NeedMessages,
+                    name: 'NeedMessages'
+                },
+            ]
+        },
+        {
+            path : '/open-thread',
+            component: PostThread,
+            name: 'PostThread',
+            meta: {
+                requiresAuth: true
+              },
         },
     ]
 })
