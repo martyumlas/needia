@@ -6,7 +6,9 @@ const chat = {
         messages : [],
         reply: false,
         contact : '',
-        transaction_status : ''
+        transaction_status : '',
+        setTransactionNo : '',
+        transaction_id : ''
     },
     mutations: {
         setPostMessages : (state, messages) => state.postMessages = messages,
@@ -14,7 +16,8 @@ const chat = {
         setMessages : (state, messages) => state.messages = messages,
         reply : (state, status) => state.reply = status,
         contact : (state, contact) => state.contact = contact,
-        transaction_status : (state, status) => state.transaction_status = status
+        transaction_status : (state, status) => state.transaction_status = status,
+        setTransactionId : (state, id) => state.transaction_id = id
     },
     actions:{
         async getPostMessages({rootGetters, commit, state}){
@@ -24,11 +27,8 @@ const chat = {
                         contact_id : state.reply ? state.contact : rootGetters.post.user.id
                     }
                 })
-
                 commit('setPostMessages', res.data)
-
             } catch (error) {
-
                 console.log(error)
             }
         },
@@ -39,8 +39,6 @@ const chat = {
                     contact_id : state.reply ? state.contact : rootGetters.post.user.id
                 })
                 commit('pushMessage', res.data.data)
-
-
                 commit('transaction_status', res.data.transaction.status)
             } catch (error) {
                 console.log(error)
@@ -54,9 +52,6 @@ const chat = {
                     }
                 })
                 commit('setMessages', res.data)
-
-
-
             } catch (error) {
                 console.log(error)
             }
@@ -66,41 +61,43 @@ const chat = {
                 const res = await axios.get('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id+'/message')
 
                 commit('setMessages', res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async proceedWithTheDeal({state, commit}){
+            try {
+                const res = await axios.post('api/transaction/'+state.transaction_id+'/proceed-with-the-deal',{
+                    contact_id : state.contact,
+                })
+                commit('transaction_status', res.data.data.status)
+
 
             } catch (error) {
                 console.log(error)
             }
         },
-        async proceedWithTheDeal({rootGetters, state, commit}){
+        async markPostAsSold({state, commit}){
             try {
-
-                const res = await axios.post('api/post/'+rootGetters.post.id+'/proceed-with-the-deal',{
+                const res = await axios.post('api/transaction/'+state.transaction_id+'/mark-as-sold',{
                     contact_id : state.contact
                 })
-
-                commit('transaction_status', res.data.data[0].status)
-
-                console.log(res.data.data[0].status)
-
+                commit('transaction_status',res.data.data.status)
             } catch (error) {
                 console.log(error)
             }
         },
-        async markPostAsSold({rootGetters, state, commit}){
+        async markAllAsSold({rootGetters, dispatch}){
             try {
-
-                const res = await axios.post('api/post/'+rootGetters.post.id+'/mark-as-sold',{
-                    contact_id : state.contact
-                })
-
-                commit('transaction_status',res.data.data[0].status)
-
-                console.log(res.data.data[0].status)
+                const res = await axios.post('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id+'/mark-all-as-sold')
+                dispatch('postMessages')
+                console.log(res.data)
 
             } catch (error) {
                 console.log(error)
             }
         },
+
     },
     getters:{
         postMessages : (state) => state.postMessages,

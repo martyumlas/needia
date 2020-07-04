@@ -28,7 +28,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Echo from 'laravel-echo';
 export default {
     computed:mapGetters(['post', 'postMessages', 'user', 'password', 'baseUrl','transaction_status']),
     data(){
@@ -62,33 +61,6 @@ export default {
         this.$store.dispatch('getPostMessages')
 
 
-
-        var basicAuth = 'Basic ' + btoa(this.user.email + ':' + this.password);
-
-        window.Pusher = require('pusher-js');
-
-
-
-        window.Echo = new Echo({
-            broadcaster: 'pusher',
-            key: '5f935cf5b004088ca696',
-            cluster: 'ap1',
-            encrypted: false,
-            forceTLS: true,
-            authEndpoint: this.baseUrl + 'broadcasting/auth',
-            auth:{
-               headers:{
-                    Authorization : basicAuth,
-               }
-            }
-        });
-
-
-        window.Echo.private(`messages.${this.user.id}`)
-            .listen('NewMessage', (e) => {
-            this.$store.commit('pushMessage', e.message)
-            console.log(e)
-        })
     }
 
 }

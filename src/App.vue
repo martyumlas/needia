@@ -18,13 +18,37 @@
 
 <script>
 import Navbar from './components/Navbar'
+import Echo from 'laravel-echo';
+import { mapGetters } from 'vuex';
 export default {
   name: 'App',
   components:{Navbar},
+  computed:mapGetters(['baseUrl','user', 'basicAuth']),
   mounted(){
-    // this.$store.dispatch('getOffers')
-    // this.$store.dispatch('getToken')
     // this.$store.dispatch('registerToken')
+      window.Pusher = require('pusher-js');
+    if(this.user){
+
+      window.Echo = new Echo({
+          broadcaster: 'pusher',
+          key: '5f935cf5b004088ca696',
+          cluster: 'ap1',
+          encrypted: false,
+          forceTLS: true,
+          authEndpoint: this.baseUrl + 'broadcasting/auth',
+          auth:{
+            headers:{
+                  Authorization : this.basicAuth,
+            }
+          }
+      });
+      window.Echo.private(`messages.${this.user.id}`)
+          .listen('NewMessage', (e) => {
+          this.$store.commit('pushMessage', e.message)
+          console.log(e)
+      })
+    }
+
   }
 }
 </script>
