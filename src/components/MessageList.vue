@@ -4,8 +4,13 @@
           <li v-for="message in messages" :key='message.id' class="list-group-item d-flex" style="cursor:pointer" @click="openChat(message)">
               <img :src="baseUrl + message.post.images[0].photo_url" alt="" width="100" height="100">
               <div class="ml-4">
-                <h3>{{message.post.user_id === user.id ? message.from.username : message.to.username}}</h3>
-                <p>{{message.text}}</p>
+                <h3>{{message.transaction.user_id === user.id ? message.transaction.another_user.username : message.transaction.user.username}}</h3>
+                <p><strong>{{message.from.id == user.id ? 'You' : message.from.username}} </strong>: {{message.text}}
+                <span v-if="message.session">
+                    <img :src="baseUrl +  message.session.images[0].photo_url" alt="" width="100" height="100">
+                    </span>
+                 </p>
+
                 <button class="btn btn-primary" v-if="message.transaction.status != 0">{{message.transaction.status == 1 ? 'On Going Deal' : message.transaction.status == 2 ? 'Sold' : ''}}</button>
               </div>
 
@@ -22,7 +27,7 @@ export default {
         openChat(message){
             this.$store.commit('setPost', message.post)
             this.$store.commit('reply', true)
-            this.$store.commit('contact', message.post.user.id != this.user.id ? message.post.user.id : message.from.id)
+            this.$store.commit('contact', message.post.user.id != this.user.id ? message.post.user.id : message.transaction.another_user.id)
             console.log(message.transaction.id)
             this.$store.commit('transaction_status', message.transaction.status)
             this.$store.commit('setTransactionId', message.transaction.id)

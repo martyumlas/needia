@@ -46,7 +46,7 @@
              <li v-for="message in messages" :key="message.id">{{message.length}}</li>
            </ul> -->
            <button class="btn btn-primary"  v-if="post.user.id === user.id">
-              <h2 @click='openThread' class="text-center"> {{messages.length}} active chat</h2>
+              <h2 @click='openThread' class="text-center" v-if="messages"> {{messages.length}} active chat</h2>
            </button>
         </div>
         <!-- /.card -->
@@ -115,7 +115,11 @@ export default {
     },
     mounted(){
       this.$store.dispatch('getPost', this.$route.params.id)
+
+    setTimeout(() => {
       this.$store.dispatch('postMessages')
+    },5000)
+
 
     }
 }

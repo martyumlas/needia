@@ -44,8 +44,9 @@ export default {
       });
       window.Echo.private(`messages.${this.user.id}`)
           .listen('NewMessage', (e) => {
-          this.$store.commit('pushMessage', e.message)
-          console.log(e)
+            setTimeout(() => {
+               this.$store.commit('pushMessage', e.message)
+            }, 1000)
       })
     }
 

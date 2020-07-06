@@ -32,14 +32,37 @@ const chat = {
                 console.log(error)
             }
         },
-        async sendMessage({commit, rootGetters, state}, payload){
+        // async sendMessage({commit, rootGetters, state}, payload){
+        //     try {
+        //         const res = await axios.post('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id +'/message', {
+        //             text : payload.text,
+        //             contact_id : state.reply ? state.contact : rootGetters.post.user.id
+        //         })
+        //         commit('pushMessage', res.data.data)
+        //         commit('transaction_status', res.data.transaction.status)
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // },
+         async sendMessage({commit, rootGetters, state}, payload){
             try {
-                const res = await axios.post('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id +'/message', {
-                    text : payload.text,
-                    contact_id : state.reply ? state.contact : rootGetters.post.user.id
-                })
+              commit('setErrors', '')
+
+                let form = new FormData
+
+                for( var i = 0; i < payload.images.length; i++ ){
+                let file = payload.images[i];
+
+                form.append('images[' + i + ']', file);
+                }
+
+                form.append('text', payload.text)
+                form.append('contact_id', state.reply ? state.contact : rootGetters.post.user.id )
+                const res = await axios.post('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id +'/message', form)
+
                 commit('pushMessage', res.data.data)
                 commit('transaction_status', res.data.transaction.status)
+
             } catch (error) {
                 console.log(error)
             }
