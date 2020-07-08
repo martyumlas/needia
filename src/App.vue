@@ -46,6 +46,15 @@ export default {
           .listen('NewMessage', (e) => {
             setTimeout(() => {
                this.$store.commit('pushMessage', e.message)
+               console.log(e.message)
+            }, 1000)
+      })
+
+      window.Echo.private(`messages.${this.user.id}`)
+          .listen('SystemMessage', (e) => {
+            setTimeout(() => {
+               this.$store.commit('pushMessage', e.message)
+               console.log(e.message)
             }, 1000)
       })
     }

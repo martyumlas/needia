@@ -28,6 +28,7 @@ const chat = {
                     }
                 })
                 commit('setPostMessages', res.data)
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -56,12 +57,18 @@ const chat = {
                 form.append('images[' + i + ']', file);
                 }
 
+                for( var j = 0; j < payload.files.length; j++ ){
+                    let file = payload.files[j];
+                    form.append('files[' + j + ']', file);
+                }
+
                 form.append('text', payload.text)
                 form.append('contact_id', state.reply ? state.contact : rootGetters.post.user.id )
                 const res = await axios.post('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id +'/message', form)
 
                 commit('pushMessage', res.data.data)
                 commit('transaction_status', res.data.transaction.status)
+                console.log(res.data)
 
             } catch (error) {
                 console.log(error)
@@ -106,6 +113,18 @@ const chat = {
                     contact_id : state.contact
                 })
                 commit('transaction_status',res.data.data.status)
+                console.log(res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async cancelDeal({state, commit}){
+            try {
+                const res = await axios.post('api/transaction/'+state.transaction_id+'/cancel-deal',{
+                    contact_id : state.contact
+                })
+                commit('transaction_status',res.data.data.status)
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -120,6 +139,7 @@ const chat = {
                 console.log(error)
             }
         },
+
 
     },
     getters:{
