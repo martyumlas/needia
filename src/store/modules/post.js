@@ -107,6 +107,7 @@ const post = {
                 }
 
                 form.delete('bookmarks')
+                form.delete('transactions')
 
                 form.append('_method', 'PATCH')
                 form.delete('created_at')
@@ -157,6 +158,8 @@ const post = {
 
                 dispatch('postMessages')
 
+                console.log(res.data)
+
             } catch (error) {
                 console.log(error)
             }
@@ -191,17 +194,6 @@ const post = {
                 console.log(error)
             }
         },
-        async postMessages({state, rootGetters, commit})
-        {
-            try {
-                const res = await axios.get('api/user/'+rootGetters.user.id+'/post/'+state.post.id+'/message')
-                commit('setMessages', res.data)
-
-                console.log(res.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
     },
     getters:{
         offers: (state) => state.offers,

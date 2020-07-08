@@ -1,10 +1,20 @@
 <template>
   <div>
       <ul class="list-group">
-          <li v-for="message in messages" :key='message.id' class="list-group-item" style="cursor:pointer" @click="openChat(message)">
+          <li v-for="message in messages" :key='message.id' class="list-group-item d-flex" style="cursor:pointer" @click="openChat(message)">
               <img :src="baseUrl + message.post.images[0].photo_url" alt="" width="100" height="100">
-              <!-- {{message.post.user.id != user.id ? message.post.user.username : message.from.username}} -->
-                {{message.from == user.id ? message.to.username : message.from.username}}
+              <div class="ml-4">
+                <h3>{{message.transaction.user_id === user.id ? message.transaction.another_user.username : message.transaction.user.username}}</h3>
+                <p><strong>{{message.from.id == user.id ? 'You' : message.from.username}} </strong>: {{message.text}}
+                    <span v-if="!message.text && message.session.images">
+                    send a image or file
+                    </span>
+
+                 </p>
+
+                <button class="btn btn-primary" v-if="message.transaction.status != 0">{{message.transaction.status == 1 ? 'On Going Deal' : message.transaction.status == 2 ? 'Sold' : ''}}</button>
+              </div>
+
           </li>
       </ul>
   </div>
@@ -18,7 +28,9 @@ export default {
         openChat(message){
             this.$store.commit('setPost', message.post)
             this.$store.commit('reply', true)
-            this.$store.commit('contact', message.post.user.id != this.user.id ? message.post.user.id : message.from.id)
+            this.$store.commit('contact', message.post.user.id != this.user.id ? message.post.user.id : message.transaction.another_user.id)
+            this.$store.commit('transaction_status', message.transaction.status)
+            this.$store.commit('setTransactionId', message.transaction.id)
             this.$router.push('/chat')
         }
     }

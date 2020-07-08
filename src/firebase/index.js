@@ -10,7 +10,7 @@ const firebaseConfig = {
     messagingSenderId: "948254415377",
     appId: "1:948254415377:web:91fe7a296cc76835ad2fb0",
     measurementId: "G-ZLVWYBH3FE"
-  };
+};
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyATaIQJ_SSb4EhBBUjXG5SGjRWP5Poiv9c",

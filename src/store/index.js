@@ -25,7 +25,8 @@ const store = new Vuex.Store({
         baseUrl : 'http://localhost:6600/',
         updateUser: '',
         profile: '',
-        token: ''
+        token: '',
+        basicAuth: ''
 
     },
     mutations:{
@@ -37,7 +38,8 @@ const store = new Vuex.Store({
         setPassword: (state, password) => state.password = password,
         setUpdateUser:(state, user) => state.updateUser =  user,
         setToken : (state, token) => state.token = token,
-        setBaseUrl : (state, url) => state.baseUrl =url
+        setBaseUrl : (state, url) => state.baseUrl =url,
+        setBasicAuth :(state, basicAuth) => state.basicAuth = basicAuth
     },
     actions:{
         async register({commit}, payload)
@@ -258,7 +260,8 @@ const store = new Vuex.Store({
         password : (state) => state.password,
         baseUrl : (state) => state.baseUrl,
         updateUser: (state) => state.updateUser,
-        profile: (state) => state.profile
+        profile: (state) => state.profile,
+        basicAuth : (state) => state.basicAuth
     }
 })
 
