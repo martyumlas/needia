@@ -18,11 +18,7 @@
       </div>
 
       <div class="col-lg-9 mb-5 mt-4" >
-        <div class="alert alert-success" v-if="message">{{message}}
-           <button type="button" class="close" data-dismiss="alert" aria-label="Close" @click="clearMessage">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+        <Message/>
         <Errors/>
         <router-view></router-view>
       </div>
@@ -34,9 +30,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import Errors from '../../components/Errors'
+import Message from '../../components/Message'
 export default {
   computed:mapGetters(['message', 'user']),
-  components:{Errors},
+  components:{Errors, Message},
   methods:{
     setPostType(id){
       this.$store.commit('setPostType', id)

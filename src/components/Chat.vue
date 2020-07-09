@@ -1,5 +1,7 @@
 <template>
 <div class="container my-5">
+        <Message/>
+        <Errors/>
     <div class="card chat-box">
         <div class="card-header">
             <h1>{{post.title}}</h1>
@@ -7,6 +9,7 @@
             <h5>{{post.price}}</h5>
             <button class="btn btn-primary" @click="proceedWithDeal" v-if="post.user.id == user.id" :class="{'disabled' : transaction_status === 2}">{{transaction_status == 1 ? "Mark As Sold" : transaction_status == 2 ? 'Sold' : 'Proceed with deal'}}</button>
             <button class="btn btn-primary ml-3" v-if="transaction_status == 1 && post.user_id === user.id" @click="cancelDeal">Cancel Deal</button>
+            <router-link class="btn btn-primary ml-3" v-if="transaction_status === 2" to="/review" >Leave a review</router-link>
         </div>
         <div class="card-body d-flex flex-column justify-content-between">
             <div class="messages">
@@ -67,8 +70,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Errors from './Errors'
+import Message from './Message'
 export default {
-    computed:mapGetters(['post', 'postMessages', 'user', 'password', 'baseUrl','transaction_status']),
+    components: {Errors, Message},
+    computed:mapGetters(['post', 'postMessages', 'user', 'password', 'baseUrl','transaction_status', 'message', 'errors']),
     data(){
         return{
             text: '',
@@ -90,9 +96,9 @@ export default {
         proceedWithDeal()
         {
             if(this.transaction_status == 1){
-                this.$store.dispatch('markPostAsSold')
+               return this.$store.dispatch('markPostAsSold')
             }else if(this.transaction_status == 2){
-                return ;
+              return  this.$store.dispatch('markPostAsSold');
             }
             this.$store.dispatch('proceedWithTheDeal')
         },
@@ -139,6 +145,8 @@ export default {
     mounted(){
         this.$store.dispatch('getPostMessages')
 
+        var container = this.$el.querySelector(".messages");
+        container.scrollTop = container.scrollHeight;
 
     }
 

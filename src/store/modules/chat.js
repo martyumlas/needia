@@ -48,6 +48,7 @@ const chat = {
          async sendMessage({commit, rootGetters, state}, payload){
             try {
               commit('setErrors', '')
+              commit('setMessage', '')
 
                 let form = new FormData
 
@@ -66,12 +67,12 @@ const chat = {
                 form.append('contact_id', state.reply ? state.contact : rootGetters.post.user.id )
                 const res = await axios.post('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id +'/message', form)
 
-                commit('pushMessage', res.data.data)
+                // commit('pushMessage', res.data.data)
                 commit('transaction_status', res.data.transaction.status)
-                console.log(res.data)
+                commit('setMessage', res.data.message)
 
             } catch (error) {
-                console.log(error)
+                commit('setErrors', error.response.data.errors);
             }
         },
         async getMessages({rootGetters, commit}, payload){
@@ -101,8 +102,6 @@ const chat = {
                     contact_id : state.contact,
                 })
                 commit('transaction_status', res.data.data.status)
-
-
             } catch (error) {
                 console.log(error)
             }
@@ -112,7 +111,7 @@ const chat = {
                 const res = await axios.post('api/transaction/'+state.transaction_id+'/mark-as-sold',{
                     contact_id : state.contact
                 })
-                commit('transaction_status',res.data.data.status)
+                commit('transaction_status', res.data.data.status)
                 console.log(res.data)
             } catch (error) {
                 console.log(error)
@@ -139,13 +138,12 @@ const chat = {
                 console.log(error)
             }
         },
-
-
     },
     getters:{
         postMessages : (state) => state.postMessages,
         messages : (state) => state.messages,
-        transaction_status : (state) => state.transaction_status
+        transaction_status : (state) => state.transaction_status,
+        contact: (state) => state.contact
     }
 }
 

@@ -46,6 +46,7 @@ export default {
           .listen('NewMessage', (e) => {
             setTimeout(() => {
                this.$store.commit('pushMessage', e.message)
+              //  this.$store.commit('transaction_status', e.message.transaction.status)
                console.log(e.message)
             }, 1000)
       })
@@ -54,6 +55,7 @@ export default {
           .listen('SystemMessage', (e) => {
             setTimeout(() => {
                this.$store.commit('pushMessage', e.message)
+              // this.$store.commit('transaction_status', e.message.transaction.status)
                console.log(e.message)
             }, 1000)
       })

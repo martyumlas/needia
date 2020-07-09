@@ -2,6 +2,7 @@ import Offers from '../../view/post/Offers'
 import Needs from '../../view/post/Needs'
 import Post from '../../view/post/Post'
 import Chat from '../../components/Chat'
+import Review from '../../components/Review'
 
 const post = [
     {
@@ -23,6 +24,14 @@ const post = [
         path : '/chat',
         component: Chat,
         name: 'Chat',
+        meta: {
+            requiresAuth: true
+          },
+    },
+    {
+        path : '/review',
+        component: Review,
+        name: 'Review',
         meta: {
             requiresAuth: true
           },
