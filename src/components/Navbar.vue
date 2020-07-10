@@ -6,6 +6,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
+        <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSearch">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" v-model="search_string" @keyup="handleSearchString">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+        </form>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
              <router-link class="nav-link" to="/">Offers</router-link>
@@ -14,6 +18,7 @@
             <router-link class="nav-link" to="/needs">Needs</router-link>
           </li>
         </ul>
+
         <ul class="navbar-nav" v-if="!isLoggedIn">
             <li class="nav-item">
                 <router-link class="nav-link" to="/register">Register</router-link>
@@ -46,7 +51,21 @@
 import {mapGetters} from 'vuex'
 export default {
   computed: mapGetters(['isLoggedIn', 'user']),
+  data(){
+      return{
+        search_string : ''
+      }
+    },
   methods:{
+    handleSearch(){
+        this.$store.dispatch('getPosts')
+        // this.search_string = ''
+    },
+
+    handleSearchString()
+    {
+        this.$store.commit('setSearchString', this.search_string)
+    },
 
     handleLogout(){
       let result = confirm('Are you sure?')

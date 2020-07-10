@@ -83,15 +83,19 @@ const chat = {
                     }
                 })
                 commit('setMessages', res.data)
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
         },
         async postMessages({rootGetters, commit}){
             try {
-                const res = await axios.get('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id+'/message')
+                if(rootGetters.user){
 
-                commit('setMessages', res.data)
+                    const res = await axios.get('api/user/'+rootGetters.user.id+'/post/'+rootGetters.post.id+'/message')
+
+                    commit('setMessages', res.data)
+                }
             } catch (error) {
                 console.log(error)
             }

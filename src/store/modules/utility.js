@@ -47,6 +47,14 @@ const utility = {
                 console.log(error)
             }
         },
+        async getAllCategories({commit}){
+            try {
+                const res = await axios.get('api/categories')
+                commit('setCategories', res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        },
     },
     getters:{
         types : (state) => state.types,

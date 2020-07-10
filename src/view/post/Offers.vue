@@ -1,17 +1,17 @@
 <template>
-  <Posts/>
+    <Posts/>
 </template>
 
 <script>
 import Posts from './Posts'
-import {mapActions} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   components: {Posts},
-  methods:mapActions(['getOffers']),
-    mounted(){
-      this.getOffers();
-    }
-
+  computed:mapGetters(['postType']),
+  mounted(){
+    this.$store.commit('setPostType', 1)
+    this.$store.dispatch('getPosts')
+  }
 }
 </script>
 

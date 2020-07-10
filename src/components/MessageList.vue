@@ -5,7 +5,7 @@
               <img :src="baseUrl + message.post.images[0].photo_url" alt="" width="100" height="100">
               <div class="ml-4">
                 <h3>{{message.transaction.user_id === user.id ? message.transaction.another_user.username : message.transaction.user.username}}</h3>
-                <p><strong>{{message.from.id == user.id ? 'You' : message.from.username}} </strong>: {{message.text}}
+                <p><strong>{{message.from.id == user.id ? 'You' : message.from.username}} </strong>: {{message.text}} {{message.created_at}}
                     <span v-if="!message.text && message.session.images">
                     send a image or file
                     </span>

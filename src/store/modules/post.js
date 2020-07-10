@@ -2,23 +2,28 @@ import axios from 'axios'
 import router from '../../router'
 const post = {
     state:{
-        // offers:[],
-        // needs:[],
         postType: '',
         usersPost: [],
         post: '',
         isEditing: false,
-        posts:[]
+        posts:[],
+        searchString: '',
+        searchCategory: '',
+        searchSubCategory: '',
+        loading: false,
+        searchSubCategoryId : ''
     },
     mutations:{
-        // setOffers:(state, offers) => state.offers = offers,
-        // setNeeds:(state, needs) => state.needs = needs,
         setPostType:(state, type) => state.postType = type,
         setUsersPost:(state, post) => state.usersPost = post,
         setPost:(state, post) => state.post = post,
         isEditing:(state,status) => state.isEditing = status,
-
-        setPosts: (state, posts) => state.posts = posts
+        setSearchString: (state, string) => state.searchString = string,
+        setSearchSubCategories: (state, subcategory) => state.searchSubCategory = subcategory,
+        setSearchCategory: (state, category) => state.searchCategory = category,
+        setPosts: (state, posts) => state.posts = posts,
+        setLoader: (state, status) => state.loading = status,
+        setSearchSubCategoriesId : (state, id) => state.searchSubCategoryId = id
     },
     actions:{
         async getOffers({commit}){
@@ -150,6 +155,7 @@ const post = {
         async getPost({commit, dispatch}, id){
             commit('setMessage', '')
             commit('setErrors', '')
+            commit('setLoader', true)
             try {
                 const res = await axios.get('api/post/' + id)
 
@@ -158,7 +164,7 @@ const post = {
 
                 dispatch('postMessages')
 
-                console.log(res.data)
+                commit('setLoader', false)
 
             } catch (error) {
                 console.log(error)
@@ -194,6 +200,26 @@ const post = {
                 console.log(error)
             }
         },
+
+        async getPosts({commit, state})
+        {
+            commit('setLoader', true)
+            try {
+                const res = await axios.get('api/posts', {
+                    params:{
+                        post_type : state.postType,
+                        query: state.searchString,
+                        sub_category_id : state.searchSubCategoryId
+                    }
+                })
+
+                commit('setPosts', res.data)
+
+            commit('setLoader', false)
+            } catch (error) {
+                console.log(error)
+            }
+        }
     },
     getters:{
         offers: (state) => state.offers,
@@ -202,8 +228,11 @@ const post = {
         usersPost: (state) => state.usersPost,
         post: (state) => state.post,
         isEditing : (state) => state.isEditing,
-
-        posts: (state) => state.posts
+        posts: (state) => state.posts,
+        searchString :(state) => state.searchString,
+        loading: (state) => state.loading,
+        searchCategory : (state) => state.searchCategory,
+        searchSubCategory : (state) => state.searchSubCategory,
     }
 }
 

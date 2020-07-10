@@ -1,8 +1,8 @@
 <template>
   <!-- Page Content -->
   <div class="container">
-
-    <div class="row">
+    <Loader v-if="loading"/>
+    <div class="row" v-else>
 
       <div class="col-lg-12 mx-auto">
         <div class="card mt-4">
@@ -41,7 +41,7 @@
             <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
             4.0 stars
           </div>
-          <button class="btn btn-primary" v-if="post.user.id !== user.id" @click="handleSendMessage"><h2>Send Message</h2></button>
+          <button class="btn btn-primary" v-if="post.user.id !== user.id " @click="handleSendMessage"><h2>Send Message</h2></button>
            <!-- <ul>
              <li v-for="message in messages" :key="message.id">{{message.length}}</li>
            </ul> -->
@@ -79,9 +79,11 @@
 </template>
 
 <script>
+import Loader from '../../components/Loader'
 import { mapGetters } from 'vuex'
 export default {
-    computed:mapGetters(['post', 'baseUrl', 'user','messages','baseUrl']),
+    components:{Loader},
+    computed:mapGetters(['post', 'baseUrl', 'user','messages','baseUrl', 'loading']),
     data(){
       return {
       }
