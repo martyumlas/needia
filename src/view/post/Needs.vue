@@ -10,7 +10,8 @@ export default {
   computed:mapGetters(['postType']),
   mounted(){
     this.$store.commit('setPostType', 2)
-      this.$store.dispatch('getPosts')
+      // this.$store.dispatch('getPosts')
+      this.$store.dispatch('fetchPost')
   }
 }
 </script>

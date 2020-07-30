@@ -10,6 +10,7 @@ import Messages from '../components/Messages'
 import OfferMessages from '../view/messages/OfferMessages'
 import NeedMessages from '../view/messages/NeedMessages'
 import PostThread from '../components/PostThread'
+import GoogleMap from '../components/Map'
 
 Vue.use(VueRouter)
 
@@ -75,6 +76,12 @@ const router = new VueRouter({
             meta: {
                 requiresAuth: true
               },
+        },
+        {
+            path : '/map',
+            component: GoogleMap,
+            name: 'Map',
+
         },
     ]
 })

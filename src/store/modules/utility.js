@@ -15,17 +15,21 @@ const utility = {
     },
     actions:{
         async getOfferTypes({commit}){
+            commit('setLoader', true)
             try {
                 const res = await axios.get('api/offer-types')
                 commit('setTypes', res.data)
+                commit('setLoader', false)
             } catch (error) {
                 console.log(error)
             }
         },
         async getNeedTypes({commit}){
+            commit('setLoader', true)
             try {
                 const res = await axios.get('api/need-types')
                 commit('setTypes', res.data)
+                commit('setLoader', false)
             } catch (error) {
                 console.log(error)
             }

@@ -93,6 +93,7 @@ const store = new Vuex.Store({
             commit('isLoggedIn', false)
             commit('setUser','')
             commit('setToken', '')
+            dispatch('fetchPost')
             router.push('/')
 
         },

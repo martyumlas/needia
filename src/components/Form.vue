@@ -31,7 +31,7 @@
             <div class="form-group col-md-6">
                 <label for="categories">Category</label>
                 <select id="categories" class="form-control" @change="setSubcategories" v-model="post.category_id" required>
-                    <option selected v-for="category in categories" :key="category.id" :value="!isEditing ? category.id : post.category_id">{{category.title}}</option>
+                    <option selected v-for="category in categories" :key="category.id" :value="!isEditing ? category.id : post.category_id">{{!isEditing && category ? category.title : post.category.title}}</option>
                 </select>
             </div>
             <div class="form-group col-md-6">
@@ -163,7 +163,11 @@
         </div>
          <div class="form-group">
             <label for="location">Location</label>
-            <input type="text" class="form-control" id="location" placeholder="Location" autocomplete="off" v-model="post.city">
+            <div id="pac-container">
+                <input id="pac-input" type="text" class="form-control" placeholder="Enter a location"  v-model="post.city">
+                <input type="text" id="latitude" v-model="post.latitude">
+                <input type="text" id="longitude" v-model="post.longitude">
+            </div>
         </div>
         <div class="form-group">
             <label for="distance">Distance</label>
@@ -175,9 +179,14 @@
         </div>
         <button type="submit" class="btn btn-primary float-right">{{isEditing ? 'Update Post' : 'Create Post'}}</button>
     </form>
+    <div id="map" style="width:500px; height:500px"></div>
+    <div id="infowindow-content">
+      <img src="" width="16" height="16" id="place-icon">
+      <span id="place-name"  class="title"></span><br>
+      <span id="place-address"></span>
+    </div>
   </div>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 export default {
@@ -189,7 +198,7 @@ export default {
             property_type: ['apartment', 'condominium', 'house', 'room'],
             transmission: ['manual', 'automatic'],
             fuel: ['gasoline', 'diesel', 'hybrid', 'electric', 'other'],
-            images: []
+            images: [],
         }
     },
     computed:mapGetters(['categories', 'typeId','postType', 'post', 'isEditing','baseUrl', 'subCategories']),
@@ -237,7 +246,84 @@ export default {
         },
         additionalRemoveImage(key){
             this.images.splice( key, 1 );
-        }
+        },
+        initMap() {
+
+            let vm = this;
+        var map = new window.google.maps.Map(document.getElementById('map'), {
+          center: {
+              lat: vm.isEditing ? parseFloat(vm.post.latitude) :  -33.8688,
+              lng: vm.isEditing ? parseFloat(vm.post.longitude) : 151.2195},
+             zoom: 15
+        });
+        var card = document.getElementById('pac-card');
+        var input = document.getElementById('pac-input');
+        map.controls[window.google.maps.ControlPosition.TOP_RIGHT].push(card);
+
+        var autocomplete = new window.google.maps.places.Autocomplete(input);
+
+
+
+        autocomplete.bindTo('bounds', map);
+
+        // Set the data fields to return when the user selects a place.
+        autocomplete.setFields(
+            ['address_components', 'geometry', 'icon', 'name', 'formatted_address']);
+
+
+        var infowindow = new window.google.maps.InfoWindow();
+        var infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
+        var marker = new window.google.maps.Marker({
+          map: map,
+          anchorPoint: new window.google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function() {
+          infowindow.close();
+          marker.setVisible(false);
+          var place = autocomplete.getPlace();
+            vm.post.city = place.formatted_address
+
+            console.log(vm.post.city)
+           vm.post.latitude = place.geometry.location.lat();
+           vm.post.longitude = place.geometry.location.lng();
+          document.getElementById('latitude').value = vm.post.latitude
+          document.getElementById('longitude').value = vm.post.longitude
+
+          if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+
+          // If the place has a geometry, then present it on a map.
+          if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+          } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);  // Why 17? Because it looks good.
+          }
+          marker.setPosition(place.geometry.location);
+          marker.setVisible(true);
+
+          var address = '';
+          if (place.address_components) {
+            address = [
+              (place.address_components[0] && place.address_components[0].short_name || ''),
+              (place.address_components[1] && place.address_components[1].short_name || ''),
+              (place.address_components[2] && place.address_components[2].short_name || '')
+            ].join(' ');
+          }
+
+          infowindowContent.children['place-icon'].src = place.icon;
+          infowindowContent.children['place-name'].textContent = place.name;
+          infowindowContent.children['place-address'].textContent = address;
+          infowindow.open(map, marker);
+        });
+      }
+
 
     },
     mounted(){
@@ -252,7 +338,7 @@ export default {
             })
         }
 
-
+        this.initMap()
     }
 }
 </script>

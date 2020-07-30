@@ -9,9 +9,26 @@ const post = {
         posts:[],
         searchString: '',
         searchCategory: '',
+        searchCategoryId: '',
         searchSubCategory: '',
         loading: false,
-        searchSubCategoryId : ''
+        searchSubCategoryId : '',
+        searches: [],
+        sortBy: '',
+        sortDirection : 'ASC',
+        filterType : 'post',
+        users : [],
+        condition: '',
+        mode_of_shipping: '',
+        mode_of_payment : '',
+        min_price : '',
+        max_price : '',
+        city: '',
+        distance: '',
+        relatedPosts : [],
+        latestFinds : [],
+        latitude: '',
+        longtitude: ''
     },
     mutations:{
         setPostType:(state, type) => state.postType = type,
@@ -23,13 +40,50 @@ const post = {
         setSearchCategory: (state, category) => state.searchCategory = category,
         setPosts: (state, posts) => state.posts = posts,
         setLoader: (state, status) => state.loading = status,
-        setSearchSubCategoriesId : (state, id) => state.searchSubCategoryId = id
+        setSearchCategoryId : (state, id) => state.searchCategoryId = id,
+        setSearchSubCategoriesId : (state, id) => state.searchSubCategoryId = id,
+        setRecentSearches : (state, searches) => state.searches = searches,
+        setSortBy : (state, sortBy) => state.sortBy = sortBy,
+        setSortDirection : (state, sortDirection) => state.sortDirection = sortDirection,
+        setFilterType : (state, type) => state.filterType = type,
+        setUsers : (state, users) => state.users = users,
+        setCondition : (state, condition) => state.condition = condition,
+        setModeOfShipping : (state, shipping) => state.mode_of_shipping = shipping,
+        setModeOfPayment : (state, payment) => state.mode_of_payment = payment,
+        setMinPrice : (state, price) => state.min_price = price,
+        setMaxPrice : (state, price) => state.max_price = price,
+        setCity : (state, city) => state.city = city,
+        setDistance : (state, distance) => state.distance = distance,
+        setRelatedPosts : (state, posts) => state.relatedPosts = posts,
+        setLatestFinds : (state, posts) => state.latestFinds = posts,
+        setLat : (state, lat) => state.latitude = lat,
+        setLong : (state, long) => state.longtitude = long
     },
     actions:{
-        async getOffers({commit}){
+        async fetchPost({commit, rootGetters, state}){
             try {
-                const res = await axios.get('api/post-offers')
-                commit('setPosts', res.data)
+                if(rootGetters.user){
+                    const res = await axios.get('api/post-offers-needs', {
+                        params: {
+                            user_id :  rootGetters.user.id,
+                            post_type : state.postType
+                        }
+                    })
+
+                    commit('setPosts', res.data.top_picks)
+                    commit('setRelatedPosts', res.data.by_category_picks)
+                    commit('setLatestFinds', res.data.latest_finds)
+
+                    console.log(res.data)
+                }else{
+                    const res = await axios.get('api/post-offers-needs', {
+                        params: {
+                            post_type : state.postType
+                        }
+                    })
+                    commit('setPosts', res.data.top_picks)
+                }
+
             } catch (error) {
                 console.log(error)
             }
@@ -44,6 +98,7 @@ const post = {
             }
         },
         async getUsersPost({commit, rootGetters}, payload){
+            commit('setLoader', true)
             try {
                 const res = await axios.get('api/post/user/' + rootGetters.user.id, {
                     params:{
@@ -52,6 +107,7 @@ const post = {
                     }
                 })
                 commit('setUsersPost', res.data)
+                commit('setLoader', false)
             } catch (error) {
                 console.log(error)
             }
@@ -201,23 +257,79 @@ const post = {
             }
         },
 
-        async getPosts({commit, state})
+        async getPosts({commit, state, dispatch, rootGetters})
         {
-            commit('setLoader', true)
+            // commit('setLoader', true)
             try {
                 const res = await axios.get('api/posts', {
                     params:{
+                        filter_type: state.filterType,
                         post_type : state.postType,
                         query: state.searchString,
-                        sub_category_id : state.searchSubCategoryId
+                        sub_category_id : state.searchSubCategoryId,
+                        category_id : state.searchCategoryId,
+                        sortBy: state.sortBy,
+                        sortDirection: state.sortDirection,
+                        condition: state.condition,
+                        mode_of_shipping: state.mode_of_shipping,
+                        mode_of_payment: state.mode_of_payment,
+                        min_price: state.min_price,
+                        max_price: state.max_price,
+                        city: state.city,
+                        distance: state.distance,
+                        latitude : state.latitude,
+                        longitude : state.longtitude
                     }
                 })
 
-                commit('setPosts', res.data)
+                if(rootGetters.user && state.searchString || state.searchSubCategoryId || state.searchCategoryId){
+                    dispatch('postSearch')
+                }
+                console.log(res.data)
 
-            commit('setLoader', false)
+                if(state.filterType === 'profile'){
+                    commit('setUsers', res.data)
+                }else{
+                    commit('setPosts', res.data)
+                }
+
+            // commit('setLoader', false)
             } catch (error) {
                 console.log(error)
+            }
+        },
+        async postSearch({rootGetters, state}){
+            try {
+                if(rootGetters.user){
+                     await axios.post('/api/user/' + rootGetters.user.id + '/search', {
+                        query : state.searchString,
+                        subcategory_id : state.searchSubCategoryId,
+                        post_type : state.postType,
+                        category_id: state.searchCategoryId
+                    })
+                }
+
+            } catch (error) {
+                console.log(error )
+            }
+        },
+        async getSearches({rootGetters, commit}){
+            try {
+                if(rootGetters.user){
+                const res = await axios.get('/api/user/' + rootGetters.user.id + '/search')
+
+                commit('setRecentSearches', res.data)
+                }
+            } catch (error) {
+                console.log(error )
+            }
+        },
+        async deleteSearch({dispatch}, id){
+            try {
+                await axios.delete('api/' + 'search/' + id)
+                dispatch('getSearches');
+            } catch (error) {
+                console.log(error )
             }
         }
     },
@@ -233,6 +345,12 @@ const post = {
         loading: (state) => state.loading,
         searchCategory : (state) => state.searchCategory,
         searchSubCategory : (state) => state.searchSubCategory,
+        searches: (state) => state.searches,
+        sortBy:(state) => state.sortBy,
+        users: (state) => state.users,
+        filterType : (state) => state.filterType,
+        relatedPosts : (state) => state.relatedPosts,
+        latestFinds : (state) => state.latestFinds,
     }
 }
 

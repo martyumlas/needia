@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-lg-4 col-md-6 mb-4" v-for="post in usersPost" :key="post.id">
+      <Loader v-if="loading"/>
+      <div class="col-lg-4 col-md-6 mb-4" v-for="post in usersPost" :key="post.id" v-else>
         <div class="card h-100">
           <div class="card-header">
             <i class="material-icons" @click="handleEdit(post.id)">edit</i>
@@ -45,9 +46,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Loader from '../../components/Loader'
 export default {
-
-    computed:mapGetters(['usersPost', 'baseUrl']),
+    components:{Loader},
+    computed:mapGetters(['usersPost', 'baseUrl', 'loading']),
     methods:{
       handleDelete(id){
         let result = confirm('Are you  sure?')
