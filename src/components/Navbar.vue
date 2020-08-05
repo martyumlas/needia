@@ -8,17 +8,16 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSearch">
            <div class="dropdown">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="dropdownMenuLink" data-toggle="dropdown"  v-model="search_string" @keyup="handleSearchString" @click="showRecentSearches">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" id="dropdownMenuLink" data-toggle="dropdown"  v-model="search_string" @keyup="handleSearchString" @click="showRecentSearches">
           <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="width:500px">
-            <p href="#" class="ml-4">recent searches</p>
+            <p href="#" class="ml-4" v-if="recentSearches">recent searches</p>
             <ul class="list-group">
               <li v-for="query in searches" :key="query.id" class="list-group-item d-flex">
-                <a class="dropdown-item" href="#" @click="setQuery(query)">{{query.query}}</a>
-                <button class="close" @click="deleteQuery(query.id)">&times;</button>
+                <a class="dropdown-item" href="#" @click="setQuery(query)">{{query.query || query}}</a>
+                <button class="close" @click="deleteQuery(query.id)" v-if="recentSearches">&times;</button>
               </li>
             </ul>
-
           </div>
         </div>
         </form>
@@ -65,7 +64,8 @@ export default {
   computed: mapGetters(['isLoggedIn', 'user', 'searches']),
   data(){
       return{
-        search_string : ''
+        search_string : '',
+        recentSearches: true
       }
     },
   methods:{
@@ -74,6 +74,8 @@ export default {
     },
     handleSearchString(){
         this.$store.commit('setSearchString', this.search_string)
+        this.$store.dispatch('autocomplete', this.search_string)
+        this.recentSearches = false
     },
     handleLogout(){
       let result = confirm('Are you sure?')
@@ -84,10 +86,11 @@ export default {
 
     },
     showRecentSearches(){
+      this.recentSearches = true
      this.$store.dispatch('getSearches')
     },
     setQuery(query){
-      this.search_string = query.query
+      this.search_string = this.recentSearches ? query.query : query
       this.handleSearchString()
       this.handleSearch()
     },

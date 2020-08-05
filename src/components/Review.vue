@@ -32,7 +32,7 @@
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 export default {
-    computed: mapGetters(['contact']),
+    computed: mapGetters(['contact', 'user']),
     data(){
         return {
             responsiveness : '',
@@ -50,8 +50,11 @@ export default {
                 payment_delivery : this.payment_delivery,
                 politeness : this.politeness,
                 quality : this.quality,
-                text: this.text
+                text: this.text,
+                user_from: this.user.id
             }).then(res => console.log(res))
+
+            this.$router.push('/')
         }
     }
 }

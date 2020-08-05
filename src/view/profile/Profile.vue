@@ -7,6 +7,7 @@
         <div class="list-group">
           <router-link to="/profile" class="list-group-item" @click.native="setPostType(1)">My Offers</router-link>
           <router-link to="/my-needs" class="list-group-item" @click.native="setPostType(2)">My Needs</router-link>
+          <router-link to="/reviews" class="list-group-item">Reviews</router-link>
           <router-link to="/create-offer" class="list-group-item" @click.native="setPostType(1)">Create Offer</router-link>
           <router-link to="/create-need" class="list-group-item" @click.native="setPostType(2)">Create Need</router-link>
           <router-link to="/edit-profile" class="list-group-item" @click.native='getUser'>Edit Profile</router-link>

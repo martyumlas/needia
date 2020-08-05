@@ -331,6 +331,23 @@ const post = {
             } catch (error) {
                 console.log(error )
             }
+        },
+        async autocomplete({commit}, payload){
+            commit('setMessage', '')
+            try {
+                const res = await axios.get('api/post-autocomplete', {
+                    params:{
+                        query : payload
+                    }
+                })
+
+                commit('setRecentSearches', res.data)
+
+                console.log(res.data)
+
+            } catch (error) {
+                console.log(error)  
+            }
         }
     },
     getters:{

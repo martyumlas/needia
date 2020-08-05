@@ -3,6 +3,7 @@ import Needs from '../../view/post/Needs'
 import Post from '../../view/post/Post'
 import Chat from '../../components/Chat'
 import Review from '../../components/Review'
+import ReportPost from '../../components/ReportPost'
 
 const post = [
     {
@@ -19,6 +20,14 @@ const post = [
         path : '/post/:id',
         component: Post,
         name: 'Post'
+    },
+    {
+        path : '/report-post/:id',
+        component: ReportPost,
+        name: 'ReportPost',
+        meta: {
+            requiresAuth: true
+          },
     },
     {
         path : '/chat',

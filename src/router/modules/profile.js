@@ -8,6 +8,7 @@ import UpdatePassword from '../../view/profile/UpdatePassword'
 import SavedOffers from '../../view/profile/SavedOffers'
 import SavedNeeds from '../../view/profile/SavedNeeds'
 import UserProfile from '../../view/profile/UserProfile'
+import Reviews from '../../view/profile/Reviews'
 
 import Form from '../../components/Form'
 
@@ -27,6 +28,10 @@ const profile = [
             {
                 path: '/my-needs',
                 component: MyNeeds
+            },
+            {
+                path: '/reviews',
+                component: Reviews
             },
             {
                 path: '/create-offer',
