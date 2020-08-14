@@ -9,7 +9,7 @@
             <h5>{{post.price}}</h5>
             <button class="btn btn-primary" @click="proceedWithDeal" v-if="post.user.id == user.id" :class="{'disabled' : transaction_status === 2}">{{transaction_status == 1 ? "Mark As Sold" : transaction_status == 2 ? 'Sold' : 'Proceed with deal'}}</button>
             <button class="btn btn-primary ml-3" v-if="transaction_status == 1 && post.user_id === user.id" @click="cancelDeal">Cancel Deal</button>
-            <router-link class="btn btn-primary ml-3" v-if="transaction_status == 2" to="/review" >Leave a review</router-link>
+            <button class="btn btn-primary ml-3" v-if="transaction_status == 2" @click="handleReview">Leave a review</button>
         </div>
         <div class="card-body d-flex flex-column justify-content-between">
             <div class="messages">
@@ -18,7 +18,6 @@
                         <div class="text" v-if="message.text">
                            {{message.text}}
                         </div>
-
                         <div v-if="message.session" class="images">
                             <div v-for="image in message.session.images" :key="image.id" >
                                  <img :src="baseUrl + image.photo_url" alt="" style="height:100px; width: 100px;" >
@@ -139,6 +138,9 @@ export default {
             for( var i = 0; i < uploadedFiles.length; i++ ){
                 this.files.push( uploadedFiles[i] );
             }
+        },
+        handleReview(){
+            this.$router.push('/review/'+ this.post.id + '/' + this.postMessages[0].transaction_id)
         }
 
     },

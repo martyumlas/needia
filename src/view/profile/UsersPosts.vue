@@ -34,21 +34,29 @@
             <p class="card-text">{{post.description}}</p>
           </div>
           <div class="card-footer">
-            <small>{{post.is_published == 1 ? 'Active' : 'Inactive'}}</small>
-            <small class="float-right" v-if="post.is_expired == 1">{{'Expired'}}</small>
-            <small class="float-right" v-if="post.is_expired  == 0">{{post.expiration_date}}</small>
+            <div class="d-flex justify-content-between mb-3">
+              <small>{{post.is_published == 1 ? 'Active' : 'Inactive'}}</small>
+              <small class="float-right" v-if="post.is_expired == 1">{{'Expired'}}</small>
+              <small class="float-right" v-if="post.is_expired  == 0">{{post.expiration_date}}</small>
+            </div>
+            <div>
+              <button class="btn btn-primary" @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal" v-if="!post.boost">Boost This Post</button>
+              <p class="btn btn-danger" v-else>Boosted</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <Modal/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Loader from '../../components/Loader'
+import Modal from '../../components/BoostModal'
 export default {
-    components:{Loader},
+    components:{Loader, Modal},
     computed:mapGetters(['usersPost', 'baseUrl', 'loading']),
     methods:{
       handleDelete(id){
@@ -63,6 +71,10 @@ export default {
         this.$store.commit('isEditing', true)
         this.$router.push('/form')
       },
+
+      boostPost(post){
+       this.$store.commit('setPost', post);
+      }
     },
 }
 </script>

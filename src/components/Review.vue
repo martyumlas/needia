@@ -39,7 +39,9 @@ export default {
             payment_delivery: '',
             politeness : '',
             quality : '',
-            text: ''
+            text: '',
+            post_id : '',
+            transaction_id: ''
         }
     },
     methods:{
@@ -51,11 +53,17 @@ export default {
                 politeness : this.politeness,
                 quality : this.quality,
                 text: this.text,
-                user_from: this.user.id
-            }).then(res => console.log(res))
+                user_from: this.user.id,
+                post_id: this.post_id,
+                transaction_id: this.transaction_id
+            }).then(res => console.log(res.data))
 
             this.$router.push('/')
         }
+    },
+    mounted(){
+        this.post_id = this.$route.params.post_id
+        this.transaction_id = this.$route.params.transaction_id
     }
 }
 </script>

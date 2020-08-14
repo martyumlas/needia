@@ -88,6 +88,7 @@
                       <p>{{post.sub_category.title}}</p> -->
                       <p>{{post.city}}</p>
                       <p>{{post.latitude}} - {{post.longitude}}</p>
+                      <p class="btn btn-danger" v-if="post.boost">boosted</p>
                       </div>
                     </div>
                   </div>
@@ -130,6 +131,7 @@
                         <p>{{post.category.title}}</p>
                         <p>{{post.sub_category.title}}</p>
                         <p>{{post.city}}</p>
+                         <p class="btn btn-daanger" v-if="post.boost">boosted</p>
                         </div>
                       </div>
                     </div>
@@ -174,6 +176,7 @@
                           <p>{{post.category.title}}</p>
                           <p>{{post.sub_category.title}}</p>
                           <p>{{post.city}}</p>
+                           <p class="btn btn-danger" v-if="post.boost">boosted</p>
                           </div>
                         </div>
                     </div>

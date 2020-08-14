@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "firebase": "^7.15.4",
+    "jquery": "^3.5.1",
     "laravel-echo": "^1.8.0",
     "pusher-js": "^6.0.3",
     "vue": "^2.6.11",

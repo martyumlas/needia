@@ -38,7 +38,7 @@ const post = [
           },
     },
     {
-        path : '/review',
+        path : '/review/:post_id/:transaction_id',
         component: Review,
         name: 'Review',
         meta: {
