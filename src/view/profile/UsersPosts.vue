@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <Modal/>
+    <Modal :packages='packages'/>
   </div>
 </template>
 
@@ -55,9 +55,15 @@
 import { mapGetters } from 'vuex'
 import Loader from '../../components/Loader'
 import Modal from '../../components/BoostModal'
+import axios from 'axios'
 export default {
     components:{Loader, Modal},
     computed:mapGetters(['usersPost', 'baseUrl', 'loading']),
+    data () {
+      return {
+        packages:[]
+      }
+    },
     methods:{
       handleDelete(id){
         let result = confirm('Are you  sure?')
@@ -76,6 +82,9 @@ export default {
        this.$store.commit('setPost', post);
       }
     },
+    mounted(){
+        axios.get('api/packages').then(response => this.packages = response.data)
+    }
 }
 </script>
 

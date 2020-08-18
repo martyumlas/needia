@@ -52,7 +52,7 @@
             </p>
           <div v-if="posts.length && filterType == 'post'">
               <div class="d-flex flex-column" >
-                <h3 v-if="user && !searchCategory">Top Picks</h3>
+                <h3 v-if="user && !searchCategory &&  !searchString">Top Picks</h3>
                 <div class="row">
                   <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts" :key="post.id" >
                     <div class="card h-100">
@@ -95,7 +95,7 @@
                 </div>
               </div>
 
-              <div class="d-flex flex-column" v-if="user && !searchCategory" >
+              <div class="d-flex flex-column" v-if="user && !searchCategory && !searchString" >
                   <h3 v-if="user">Latest Finds</h3>
                   <div class="row">
                     <div class="col-lg-4 col-md-6 mb-4" v-for="post in latestFinds" :key="post.id" >
@@ -138,7 +138,8 @@
                   </div>
               </div>
 
-              <div class="d-flex flex-column" v-if="user && !searchCategory">
+              <div class="d-flex flex-column" v-if="user && !searchCategory && !searchString
+              ">
                 <div v-for="posts in relatedPosts" :key="posts.id">
                   <h3>{{posts[0].category.title}}</h3>
                   <div class="row">

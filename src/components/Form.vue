@@ -157,8 +157,11 @@
         <div class="form-group">
             <label for="mode_of_payment">Mode Of Payment</label>
             <select id="mode_of_payment" class="form-control" v-model="post.mode_of_payment">
-                <option>Cash</option>
-                <option>Card</option>
+                <option value="1">Barter</option>
+                <option value="2">Bank Transfer</option>
+                <option value="3">Credit Card</option>
+                <option value="4">COD</option>
+                <option value="5">Others</option>
             </select>
         </div>
          <div class="form-group">

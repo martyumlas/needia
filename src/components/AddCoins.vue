@@ -22,7 +22,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"  @click="$emit('close')" >Close</button>
-                    <button type="submit" class="btn btn-primary">Add Coins</button>
+                    <button type="submit" class="btn btn-primary" >Add Coins</button>
                 </div>
 
             </form>
@@ -39,7 +39,7 @@ export default {
     computed: mapGetters(['user']),
     data(){
         return{
-            coins: '',
+            coins: 100,
              boosts: [
                 {
                     id: 1,
@@ -66,7 +66,9 @@ export default {
         addCoins(){
             axios.patch('api/user/'+this.user.id+'/wallet', {
                 coins: this.coins
-            }).then(response => console.log(response.data))
+            }).then(response => alert(response.data.message))
+
+            this.$emit('close')
         }
     }
 }

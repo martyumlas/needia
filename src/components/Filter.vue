@@ -58,8 +58,12 @@
         <div class="form-group">
             <label for="exampleFormControlSelect1">Mode of Payment</label>
             <select class="form-control" id="exampleFormControlSelect1" v-model="mode_of_payment" @change="setModeOfPayment">
-                <option value="Cash">Cash</option>
-                <option value="Card">Card</option>
+                <option value="">All</option>
+                <option value="1">Barter</option>
+                <option value="2">Bank Transfer</option>
+                <option value="3">Credit Card</option>
+                <option value="4">COD</option>
+                <option value="5">Others</option>
             </select>
         </div>
         <div class="form-group">
