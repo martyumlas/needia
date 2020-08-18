@@ -40,7 +40,7 @@
               <small class="float-right" v-if="post.is_expired  == 0">{{post.expiration_date}}</small>
             </div>
             <div>
-              <button class="btn btn-primary" @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal" v-if="!post.boost">Boost This Post</button>
+              <button class="btn btn-primary" @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal" v-if="!post.boost && !post.is_expired">Boost This Post</button>
               <p class="btn btn-danger" v-else>Boosted</p>
             </div>
           </div>
