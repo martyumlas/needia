@@ -2,8 +2,8 @@
   <div>
     <div class="row">
       <Loader v-if="loading"/>
-      <div class="col-lg-4 col-md-6 mb-4" v-for="post in usersPost" :key="post.id" v-else>
-        <div class="card h-100">
+      <div class="col-lg-4 col-md-6 mb-4" v-for="post in usersPost" :key="post.id" v-else >
+        <div class="card h-100" :class="{'highlight' : post.highlight}">
           <div class="card-header">
             <i class="material-icons" @click="handleEdit(post.id)">edit</i>
             <button class="close" @click="handleDelete(post.id)">&times;</button>
@@ -39,15 +39,22 @@
               <small class="float-right" v-if="post.is_expired == 1">{{'Expired'}}</small>
               <small class="float-right" v-if="post.is_expired  == 0">{{post.expiration_date}}</small>
             </div>
-            <div v-if="!post.is_expired">
-              <button class="btn btn-primary" @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal" v-if="!post.boost">Boost This Post</button>
-              <p class="btn btn-danger" v-else>Boosted</p>
+            <div class="d-flex justify-content-between">
+               <div v-if="!post.is_expired">
+                  <button class="btn btn-primary" @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal" v-if="!post.boost">Boost</button>
+                  <p class="btn btn-danger"  @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal"  v-else>Boosted</p>
+              </div>
+              <div v-if="!post.is_expired">
+                <button class="btn btn-success"  @click="highlightPost(post)" data-toggle="modal" data-target="#highlightsModal" v-if="!post.highlight">Highlight</button>
+              </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
     <Modal :packages='packages'/>
+    <HighlightModal :highlights='highlights'/>
   </div>
 </template>
 
@@ -55,13 +62,15 @@
 import { mapGetters } from 'vuex'
 import Loader from '../../components/Loader'
 import Modal from '../../components/BoostModal'
+import HighlightModal from '../../components/HighlightModal'
 import axios from 'axios'
 export default {
-    components:{Loader, Modal},
+    components:{Loader, Modal, HighlightModal},
     computed:mapGetters(['usersPost', 'baseUrl', 'loading']),
     data () {
       return {
-        packages:[]
+        packages:[],
+        highlights: []
       }
     },
     methods:{
@@ -80,10 +89,14 @@ export default {
 
       boostPost(post){
        this.$store.commit('setPost', post);
+      },
+      highlightPost(post){
+         this.$store.commit('setPost', post);
       }
     },
     mounted(){
         axios.get('api/packages').then(response => this.packages = response.data)
+        axios.get('api/highlight-packages').then(res => this.highlights = res.data)
     }
 }
 </script>
@@ -91,5 +104,8 @@ export default {
 <style scoped>
 i{
   cursor: pointer;
+}
+.highlight{
+  border: 10px solid lightblue
 }
 </style>

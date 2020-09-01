@@ -10,8 +10,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Loader from '../../components/Loader'
+import axios from 'axios'
 export default {
-    computed: mapGetters(['types', 'loading']),
+    computed: mapGetters(['types', 'loading', 'user']),
     components:{Loader},
     methods:{...mapActions(['getOfferTypes']),
         createOffer(id){
@@ -22,6 +23,7 @@ export default {
     },
     mounted(){
         this.getOfferTypes()
+        axios.get('api/user/'+ this.user.id + '/allowed-post-left',{params: {post_type: 1}} ).then(response => console.log(response.data))
     }
 }
 </script>

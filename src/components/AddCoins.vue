@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <h3>Insuffucient Coins</h3>
                     <div class="form-group">
-                        <select name="" id="" class="form-control" v-model="coins">
+                        <select  class="form-control" v-model="coins">
                             <option value=100>100</option>
                             <option value=300>300</option>
                             <option value=2000>2000</option>
@@ -39,7 +39,7 @@ export default {
     computed: mapGetters(['user']),
     data(){
         return{
-            coins: 100,
+            coins: 100 ,
              boosts: [
                 {
                     id: 1,

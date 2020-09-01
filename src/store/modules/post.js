@@ -169,6 +169,7 @@ const post = {
 
                 form.delete('bookmarks')
                 form.delete('transactions')
+                form.delete('boost')
 
                 form.append('_method', 'PATCH')
                 form.delete('created_at')

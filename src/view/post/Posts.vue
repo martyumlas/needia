@@ -55,7 +55,7 @@
                 <h3 v-if="user && !searchCategory &&  !searchString">Top Picks</h3>
                 <div class="row">
                   <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts" :key="post.id" >
-                    <div class="card h-100">
+                    <div class="card h-100" :class="{'highlight' : post.highlight}">
                       <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                         <ol class="carousel-indicators">
                           <li :data-target="'#post-'+post.id" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>
@@ -99,7 +99,7 @@
                   <h3 v-if="user">Latest Finds</h3>
                   <div class="row">
                     <div class="col-lg-4 col-md-6 mb-4" v-for="post in latestFinds" :key="post.id" >
-                      <div class="card h-100">
+                      <div class="card h-100" :class="{'highlight' : post.highlight}">
                         <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                           <ol class="carousel-indicators">
                             <li :data-target="'#post-'+post.id" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>
@@ -145,7 +145,7 @@
                   <div class="row">
                     <div class="col-lg-4 col-md-6 mb-4"  v-for="post in posts" :key="post.id" >
 
-                       <div class="card h-100">
+                       <div class="card h-100" :class="{'highlight' : post.highlight}">
                           <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                             <ol class="carousel-indicators">
                               <li :data-target="'#post-'+post.id" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>
@@ -267,5 +267,8 @@ i{
 }
 .searches{
   font-size: 3rem;
+}
+.highlight{
+  border: 10px solid blue
 }
 </style>
