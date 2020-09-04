@@ -32,7 +32,4 @@ export default {
 </script>
 
 <style>
-.text{
-    color: pink;
-}
 </style>
