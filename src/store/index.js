@@ -112,6 +112,7 @@ const store = new Vuex.Store({
             try {
                 const res = await axios.get('api/user/' + state.user.id)
                 commit('setUpdateUser', res.data)
+                commit('setUser', res.data)
             } catch (error) {
                 commit('setErrors', error.response.data.errors);
             }
@@ -194,6 +195,7 @@ const store = new Vuex.Store({
             try {
                 const res = await axios.get('api/user/' + id)
                 commit('setProfile', res.data)
+                console.log(res.data)
             } catch (error) {
                console.log(error)
             }

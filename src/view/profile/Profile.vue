@@ -14,8 +14,9 @@
           <router-link to="/saved-offers" class="list-group-item"  @click.native="setPostTypeBookmarks(1)">Saved Offers</router-link>
           <router-link to="/saved-needs" class="list-group-item" @click.native="setPostTypeBookmarks(2)">Saved Needs</router-link>
           <router-link to="/update-password" class="list-group-item">Update Password</router-link>
+          <a href="#" data-toggle="modal" data-target="#subscription" class="list-group-item">Subscription</a>
         </div>
-
+        <SubscriptionModal/>
       </div>
 
       <div class="col-lg-9 mb-5 mt-4" >
@@ -32,9 +33,10 @@
 import { mapGetters } from 'vuex'
 import Errors from '../../components/Errors'
 import Message from '../../components/Message'
+import SubscriptionModal from '../../components/SubscriptionModal'
 export default {
   computed:mapGetters(['message', 'user']),
-  components:{Errors, Message},
+  components:{Errors, Message, SubscriptionModal},
   methods:{
     setPostType(id){
       this.$store.commit('setPostType', id)

@@ -52,13 +52,15 @@ export default {
         boostPost(){
             axios.post('api/post/' + this.post.id + '/boost',{package_id: this.pack.id })
             .then(response => {
-                if(response.data.message == "Insufficient Coins"){
+                    alert(response.data.message)
+            }).catch(e => {
+                 if(e.response.data.error == "Insufficient Coins"){
                    this.showModal = true
                    this.display = 'block'
-                } else {
-                    alert(response.data.message)
                 }
-            }).catch(e => {alert(e.response.data.error), console.log(e.response.data.error)})
+                alert(e.response.data.error),
+                console.log(e.response.data)
+            })
         },
         close(){
             this.showModal = false

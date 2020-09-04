@@ -49,13 +49,15 @@ export default {
         highlightPost(){
              axios.post('api/post/' + this.post.id + '/highlight',{highlight_package_id: this.pack.id })
             .then(response => {
-                if(response.data.message == "Insufficient Coins"){
+                    alert(response.data.message)
+            }).catch(e => {
+               if(e.response.data.errors == "Insufficient Coins"){
                    this.showModal = true
                    this.display = 'block'
-                } else {
-                    alert(response.data.message)
                 }
-            }).catch(e => {alert(e.response.data.error), console.log(e.response.data.error)})
+                alert(e.response.data.errors),
+               console.log(e.response.data.errors)
+            })
         },
         close(){
             this.showModal = false
