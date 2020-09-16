@@ -137,7 +137,11 @@ export default {
 
 
            axios.post('api/user/' + this.user.id + '/review-dispute', form)
-           .then(response => console.log(response.data.message))
+           .then(response => {
+               alert(response.data.message)
+               this.$router.push('/profile')
+
+            })
 
         }
     },

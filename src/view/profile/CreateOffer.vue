@@ -16,7 +16,7 @@ export default {
     components:{Loader},
     methods:{...mapActions(['getOfferTypes']),
         createOffer(type){
-            if(this.user.is_subscribed && type.needr_plus || !this.user.is_subscribed && !type.needr_plus) {
+            if(this.user.is_subscribed || !this.user.is_subscribed && !type.needr_plus) {
                 this.$store.dispatch('getCategories', type.id)
                 this.$store.commit('setTypeId', type.id)
                 this.$router.push('/form')

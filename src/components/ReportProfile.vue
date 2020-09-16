@@ -25,7 +25,9 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
+    computed: mapGetters(['user']),
     data(){
         return{
             description: '',
@@ -88,17 +90,21 @@ export default {
             console.log(this.reason)
         },
         handleSubmit(){
-            axios.post('api/post/'+ this.post + '/report-post', {
+            axios.post('api/user/'+ this.$route.params.id + '/report-profile', {
                 reason: this.reason,
-                description: this.description
+                description: this.description,
+                reported_by: this.user.id
             })
-            .then(response => alert(response.data.message))
+            .then(response => {
+                alert(response.data.message)
+                this.$router.push('/')
+            })
 
-            this.$router.push('/')
+
         }
     },
     mounted(){
-        this.post = this.$route.params.id
+        console.log(this.$route.params.id)
     }
 }
 </script>

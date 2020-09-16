@@ -54,11 +54,11 @@ export default {
             .then(response => {
                     alert(response.data.message)
             }).catch(e => {
-                 if(e.response.data.error == "Insufficient Coins"){
+                 if(e.response.data.errors[0] == "Insufficient Coins"){
                    this.showModal = true
                    this.display = 'block'
                 }
-                alert(e.response.data.error),
+                alert(e.response.data.errors[0]),
                 console.log(e.response.data)
             })
         },

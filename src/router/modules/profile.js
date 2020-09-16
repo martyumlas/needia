@@ -9,6 +9,7 @@ import SavedOffers from '../../view/profile/SavedOffers'
 import SavedNeeds from '../../view/profile/SavedNeeds'
 import UserProfile from '../../view/profile/UserProfile'
 import Reviews from '../../view/profile/Reviews'
+import ReportProfile from '../../components/ReportProfile'
 
 import Form from '../../components/Form'
 
@@ -75,7 +76,15 @@ const profile = [
         meta: {
             requiresAuth: true
           },
-    }
+    },
+    {
+        path : '/report-profile/:id',
+        component: ReportProfile,
+        name: 'ReportProfile',
+        meta: {
+            requiresAuth: true
+          },
+    },
 ]
 
 export default profile
