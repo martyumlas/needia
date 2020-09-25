@@ -7,9 +7,9 @@ import './firebase'
 
 
 // Vue.config.productionTip = false
-// axios.defaults.baseURL = 'http://localhost:6600/'
+axios.defaults.baseURL = 'http://localhost:6600/'
 //  axios.defaults.baseURL = 'https://app.beta.needr.com/'
-axios.defaults.baseURL = 'https://app.alpha.needr.com/'
+// axios.defaults.baseURL = 'https://app.alpha.needr.com/'
 
 var email = store.getters.user.email;
 var password = store.getters.password;

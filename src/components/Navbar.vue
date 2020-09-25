@@ -28,6 +28,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/needs">Needs</router-link>
           </li>
+            <li class="nav-item">
+            <a class="nav-link" href="http://localhost:6600/faq">FAQ</a>
+          </li>
         </ul>
 
         <ul class="navbar-nav" v-if="!isLoggedIn">
