@@ -13,6 +13,7 @@
     "firebase": "^7.15.4",
     "jquery": "^3.5.1",
     "laravel-echo": "^1.8.0",
+    "laravel-vue-pagination": "^2.3.1",
     "pusher-js": "^6.0.3",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",

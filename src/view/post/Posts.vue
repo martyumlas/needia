@@ -5,6 +5,25 @@
       <div class="col-lg-9" >
         <Loader v-if="loading" />
           <div v-else class="my-3">
+             <!-- <h3>Top Picks</h3>
+            <ul>
+              <li v-for="post in posts.data" :key="post.id">{{post.title}}</li>
+            </ul>
+            <Pagination :data="posts" @pagination-change-page="topPicks"/>
+            <h3>By category</h3>
+             <ul v-for="posts in relatedPosts.data" :key="posts.id">
+               <h3>{{posts[0].category.title}}</h3>
+              <li v-for="item in posts" :key="item.id">{{item.title}}</li>
+
+            </ul>
+            <Pagination :data="relatedPosts" @pagination-change-page="categoryPick"/>
+
+
+              <h3>latest</h3>
+            <ul>
+              <li v-for="post in latestFinds.data" :key="post.id">{{post.title}}</li>
+            </ul>
+             <Pagination :data="latestFinds" @pagination-change-page="latests"/> -->
             <!-- <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
               <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -50,11 +69,13 @@
               <button class="ml-2 close" @click="clearSubCat">&times;</button>
               </span>
             </p>
-          <div v-if="posts.length && filterType == 'post'">
+
+
+          <div v-if="posts && filterType == 'post'">
               <div class="d-flex flex-column" >
                 <h3 v-if="user && !searchCategory &&  !searchString">Top Picks</h3>
                 <div class="row">
-                  <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts" :key="post.id" >
+                  <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts.data" :key="post.id" >
                     <div class="card h-100" :class="{'highlight' : post.highlight}">
                       <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -93,12 +114,14 @@
                     </div>
                   </div>
                 </div>
+                <Pagination :data="posts" @pagination-change-page="topPicks"/>
               </div>
+
 
               <div class="d-flex flex-column" v-if="user && !searchCategory && !searchString" >
                   <h3 v-if="user">Latest Finds</h3>
                   <div class="row">
-                    <div class="col-lg-4 col-md-6 mb-4" v-for="post in latestFinds" :key="post.id" >
+                    <div class="col-lg-4 col-md-6 mb-4" v-for="post in latestFinds.data" :key="post.id" >
                       <div class="card h-100" :class="{'highlight' : post.highlight}">
                         <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                           <ol class="carousel-indicators">
@@ -136,11 +159,12 @@
                       </div>
                     </div>
                   </div>
+                  <Pagination :data="latestFinds" @pagination-change-page="latests"/>
               </div>
 
               <div class="d-flex flex-column" v-if="user && !searchCategory && !searchString
               ">
-                <div v-for="posts in relatedPosts" :key="posts.id">
+                <div v-for="posts in relatedPosts.data" :key="posts.id">
                   <h3>{{posts[0].category.title}}</h3>
                   <div class="row">
                     <div class="col-lg-4 col-md-6 mb-4"  v-for="post in posts" :key="post.id" >
@@ -184,7 +208,9 @@
 
                   </div>
                 </div>
+                 <Pagination :data="relatedPosts" @pagination-change-page="categoryPick"/>
               </div>
+
           </div>
 
           <div v-else-if="users.length && filterType == 'profile' || filterType == 'business'">
@@ -210,10 +236,29 @@ import { mapGetters } from 'vuex'
 import Loader from '../../components/Loader'
 import FilterPost from '../../components/Filter'
 import Users from '../../components/Users'
+import Pagination from 'laravel-vue-pagination'
 export default {
-    components:{Categories, Loader, FilterPost, Users},
+    components:{Categories, Loader, FilterPost, Users, Pagination},
     computed:mapGetters(['posts','user', 'baseUrl', 'searchString', 'loading', 'searchSubCategory', 'users', 'filterType', 'postType', 'searchCategory', 'relatedPosts', 'latestFinds']),
     methods:{
+      topPicks(page = 1) {
+        this.$store.dispatch('fetchPost', {
+          title: 'top_picks',
+          page: page
+        })
+      },
+      latests(page = 1) {
+        this.$store.dispatch('fetchPost', {
+          title: 'latest_finds',
+          page: page
+        })
+      },
+      categoryPick(page = 1) {
+          this.$store.dispatch('fetchPost', {
+          title: 'category_pick',
+          page: page
+        })
+      },
       clearSubCat(){
         this.$store.commit('setSearchSubCategoriesId', '')
         this.$store.commit('setSearchSubCategories', '')

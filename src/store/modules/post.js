@@ -60,10 +60,11 @@ const post = {
         setLong : (state, long) => state.longtitude = long
     },
     actions:{
-        async fetchPost({commit, rootGetters, state}){
+        async fetchPost({commit, rootGetters, state}, payload){
+            console.log(payload)
             try {
                 if(rootGetters.user){
-                    const res = await axios.get('api/post-offers-needs', {
+                    const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
                         params: {
                             user_id :  rootGetters.user.id,
                             post_type : state.postType
@@ -74,9 +75,11 @@ const post = {
                     commit('setRelatedPosts', res.data.by_category_picks)
                     commit('setLatestFinds', res.data.latest_finds)
 
+
+
                     console.log(res.data)
                 }else{
-                    const res = await axios.get('api/post-offers-needs', {
+                    const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
                         params: {
                             post_type : state.postType
                         }

@@ -39,6 +39,9 @@
               <small class="float-right" v-if="post.is_expired == 1">{{'Expired'}}</small>
               <small class="float-right" v-if="post.is_expired  == 0">{{post.expiration_date}}</small>
             </div>
+            <div class="mb-3">
+              {{post.mark_as_sold ? 'Sold' : ''}}
+            </div>
             <div class="d-flex justify-content-between">
                <div v-if="!post.is_expired">
                   <button class="btn btn-primary" @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal" v-if="!post.boost">Boost</button>
