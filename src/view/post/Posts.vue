@@ -5,7 +5,7 @@
       <div class="col-lg-9" >
         <Loader v-if="loading" />
           <div v-else class="my-3">
-             <!-- <h3>Top Picks</h3>
+             <h3>Top Picks</h3>
             <ul>
               <li v-for="post in posts.data" :key="post.id">{{post.title}}</li>
             </ul>
@@ -23,7 +23,7 @@
             <ul>
               <li v-for="post in latestFinds.data" :key="post.id">{{post.title}}</li>
             </ul>
-             <Pagination :data="latestFinds" @pagination-change-page="latests"/> -->
+             <Pagination :data="latestFinds" @pagination-change-page="latests"/>
             <!-- <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
               <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
