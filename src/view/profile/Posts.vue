@@ -1,7 +1,7 @@
   <template>
 <div >
     <div class="row">
-      <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts" :key="post.id">
+      <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts.data" :key="post.id">
         <div class="card h-100">
             <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -35,6 +35,7 @@
       </div>
 
     </div>
+<Pagination :data='posts' @pagination-change-page="getSavedPosts"/>
 </div>
 
 </template>
@@ -42,7 +43,10 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import Pagination from 'laravel-vue-pagination'
 export default {
+  components:{Pagination},
+  props:['id'],
     data(){
       return {
         baseUrl : axios.defaults.baseURL,
@@ -55,6 +59,9 @@ export default {
       }
     },
     methods:{
+      getSavedPosts(page = 1) {
+        this.$store.dispatch('getBookmarkedPosts', {id: this.id, page: page})
+      },
       handleBookmark(post){
         console.log(post)
         post.bookmarks.filter(bookmark => {

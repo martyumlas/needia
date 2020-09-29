@@ -6,7 +6,7 @@
         <hr>
         <div v-if="!is_dispute">
             <ul class="list-group">
-                <li class="list-group-item" v-for="review in reviews" :key="review.id">
+                <li class="list-group-item" v-for="review in reviews.data" :key="review.id">
                     <div class="d-flex align-items-center">
                          <img :src="review.review_from.photo_url ? baseUrl + review.review_from.photo_url : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT7umTPgrLSV5xtD74U98xBYm2wQEi7RLNyotXacUjd1c3fhJyS&usqp=CAU'" alt="" width="100" height="100" class="rounded-circle mr-3">
                         <div>
@@ -17,6 +17,7 @@
                     </div>
                 </li>
             </ul>
+            <Pagination :data='reviews' @pagination-change-page="getReviews"/>
         </div>
         <div v-else>
             <form @submit.prevent="submitDispute">
@@ -57,10 +58,12 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import Pagination from 'laravel-vue-pagination'
 export default {
+    components: {Pagination},
     data(){
         return {
-            reviews: [],
+            reviews: {},
             reason: '',
             images: [],
             description: '',
@@ -88,6 +91,10 @@ export default {
     },
     computed:mapGetters(['user', 'baseUrl']),
     methods:{
+        getReviews(page = 1) {
+            axios.get('api/user/'+this.user.id+'/reviews?page=' + page)
+            .then(res => this.reviews = res.data)
+        },
         dispute(review){
            this.is_dispute = true
            this.review = review
@@ -146,7 +153,7 @@ export default {
         }
     },
     mounted(){
-        axios.get('api/user/'+this.user.id+'/reviews')
+        axios.get('api/user/'+this.user.id+'/reviews    ')
         .then(res => this.reviews = res.data)
     }
 

@@ -164,36 +164,36 @@ export default {
             this.$store.commit('setSortBy', sortBy)
             this.$store.commit('setSortDirection', this.sortDirection)
 
-            this.$store.dispatch('getPosts')
+            this.$store.dispatch('getPosts', '')
         },
         handleType(type){
            this.$store.commit('setFilterType', type.value)
-           this.$store.dispatch('getPosts')
+           this.$store.dispatch('getPosts', '')
         },
         setCondition(){
             this.$store.commit('setCondition', this.condition)
-            this.$store.dispatch('getPosts')
+            this.$store.dispatch('getPosts', '')
         },
         setModeOfShipping(){
             this.$store.commit('setModeOfShipping', this.mode_of_shipping)
-            this.$store.dispatch('getPosts')
+            this.$store.dispatch('getPosts', '')
         },
         setModeOfPayment(){
             this.$store.commit('setModeOfPayment', this.mode_of_payment)
-            this.$store.dispatch('getPosts')
+            this.$store.dispatch('getPosts', '')
         },
         setMinPrice(){
             this.$store.commit('setMinPrice', this.min_price)
-            this.$store.dispatch('getPosts')
+            this.$store.dispatch('getPosts', '')
         },
         setMaxPrice(){
             this.$store.commit('setMaxPrice', this.max_price)
-            this.$store.dispatch('getPosts')
+            this.$store.dispatch('getPosts', '')
         },
         setDistance(){
              this.circle.setRadius(parseInt(this.distance) * 1000);
              this.$store.commit('setDistance', parseInt(this.distance) * 1000)
-             this.$store.dispatch('getPosts')
+             this.$store.dispatch('getPosts', '')
         },
 
 
@@ -254,7 +254,7 @@ export default {
             vm.$store.commit('setLong', vm.longitude)
             vm.$store.commit('setCity', vm.city)
             vm.$store.commit('setDistance', circle.radius)
-            vm.$store.dispatch('getPosts')
+            vm.$store.dispatch('getPosts', '')
 
           if (!place.geometry) {
             // User entered the name of a Place that was not suggested and

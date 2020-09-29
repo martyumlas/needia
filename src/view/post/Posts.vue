@@ -5,25 +5,6 @@
       <div class="col-lg-9" >
         <Loader v-if="loading" />
           <div v-else class="my-3">
-             <h3>Top Picks</h3>
-            <ul>
-              <li v-for="post in posts.data" :key="post.id">{{post.title}}</li>
-            </ul>
-            <Pagination :data="posts" @pagination-change-page="topPicks"/>
-            <h3>By category</h3>
-             <ul v-for="posts in relatedPosts.data" :key="posts.id">
-               <h3>{{posts[0].category.title}}</h3>
-              <li v-for="item in posts" :key="item.id">{{item.title}}</li>
-
-            </ul>
-            <Pagination :data="relatedPosts" @pagination-change-page="categoryPick"/>
-
-
-              <h3>latest</h3>
-            <ul>
-              <li v-for="post in latestFinds.data" :key="post.id">{{post.title}}</li>
-            </ul>
-             <Pagination :data="latestFinds" @pagination-change-page="latests"/>
             <!-- <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
               <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -242,10 +223,15 @@ export default {
     computed:mapGetters(['posts','user', 'baseUrl', 'searchString', 'loading', 'searchSubCategory', 'users', 'filterType', 'postType', 'searchCategory', 'relatedPosts', 'latestFinds']),
     methods:{
       topPicks(page = 1) {
-        this.$store.dispatch('fetchPost', {
-          title: 'top_picks',
-          page: page
-        })
+        if(this.searchString || this.searchCategory) {
+           this.$store.dispatch('getPosts', page)
+        } else{
+            this.$store.dispatch('fetchPost', {
+              title: 'top_picks',
+              page: page
+            })
+        }
+
       },
       latests(page = 1) {
         this.$store.dispatch('fetchPost', {
@@ -258,6 +244,9 @@ export default {
           title: 'category_pick',
           page: page
         })
+      },
+      filterPost(){
+        console.log('hello')
       },
       clearSubCat(){
         this.$store.commit('setSearchSubCategoriesId', '')

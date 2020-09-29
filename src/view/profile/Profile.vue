@@ -40,7 +40,7 @@ export default {
   methods:{
     setPostType(id){
       this.$store.commit('setPostType', id)
-      this.$store.dispatch('getUsersPost', {id : id})
+      this.$store.dispatch('getUsersPost', {id : id, page : ''})
       this.$store.commit('setPost',[])
         this.$store.commit('isEditing', false)
     },

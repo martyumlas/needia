@@ -61,7 +61,6 @@ const post = {
     },
     actions:{
         async fetchPost({commit, rootGetters, state}, payload){
-            console.log(payload)
             try {
                 if(rootGetters.user){
                     const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
@@ -101,9 +100,10 @@ const post = {
             }
         },
         async getUsersPost({commit, rootGetters}, payload){
+            console.log(payload)
             commit('setLoader', true)
             try {
-                const res = await axios.get('api/post/user/' + rootGetters.user.id, {
+                const res = await axios.get('api/post/user/' + rootGetters.user.id + '?page=' + payload.page, {
                     params:{
                         post_type : payload.id,
                         is_published: payload.is_published
@@ -111,6 +111,8 @@ const post = {
                 })
                 commit('setUsersPost', res.data)
                 commit('setLoader', false)
+
+                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -248,11 +250,12 @@ const post = {
                 console.log(error)
             }
         },
-        async getBookmarkedPosts({commit, rootGetters}, id){
+        async getBookmarkedPosts({commit, rootGetters}, payload){
             try {
                 const res = await axios.get('api/user/'+ rootGetters.user.id +'/post-bookmarks', {
                     params:{
-                        post_type : id
+                        page: payload.page,
+                        post_type : payload.id
                     }
                 })
                 commit('setPosts', res.data)
@@ -261,11 +264,11 @@ const post = {
             }
         },
 
-        async getPosts({commit, state, dispatch, rootGetters})
-        {
+        async getPosts({commit, state, dispatch, rootGetters}, page)
+        {            console.log(page)
             // commit('setLoader', true)
             try {
-                const res = await axios.get('api/posts', {
+                const res = await axios.get('api/posts?page=' + page, {
                     params:{
                         filter_type: state.filterType,
                         post_type : state.postType,

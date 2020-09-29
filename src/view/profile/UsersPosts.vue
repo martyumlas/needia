@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <Loader v-if="loading"/>
-      <div class="col-lg-4 col-md-6 mb-4" v-for="post in usersPost" :key="post.id" v-else >
+      <div class="col-lg-4 col-md-6 mb-4" v-for="post in usersPost.data" :key="post.id" v-else >
         <div class="card h-100" :class="{'highlight' : post.highlight}">
           <div class="card-header">
             <i class="material-icons" @click="handleEdit(post.id)">edit</i>
@@ -51,11 +51,11 @@
                 <button class="btn btn-success"  @click="highlightPost(post)" data-toggle="modal" data-target="#highlightsModal" v-if="!post.highlight">Highlight</button>
               </div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
+    <Pagination :data='usersPost'  @pagination-change-page="getUsersPosts"/>
     <Modal :packages='packages'/>
     <HighlightModal :highlights='highlights'/>
   </div>
@@ -67,8 +67,9 @@ import Loader from '../../components/Loader'
 import Modal from '../../components/BoostModal'
 import HighlightModal from '../../components/HighlightModal'
 import axios from 'axios'
+import Pagination from 'laravel-vue-pagination'
 export default {
-    components:{Loader, Modal, HighlightModal},
+    components:{Loader, Modal, HighlightModal, Pagination},
     computed:mapGetters(['usersPost', 'baseUrl', 'loading']),
     data () {
       return {
@@ -77,6 +78,12 @@ export default {
       }
     },
     methods:{
+      getUsersPosts(page = 1){
+        this.$store.dispatch('getUsersPost', {
+          id: 1, 
+          page: page
+        })
+      },
       handleDelete(id){
         let result = confirm('Are you  sure?')
 

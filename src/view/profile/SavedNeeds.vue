@@ -1,6 +1,6 @@
 <template>
   <div>
-      <Posts/>
+      <Posts :id='2'/>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
     components:{Posts},
 
     mounted(){
-      this.$store.dispatch('getBookmarkedPosts', 2)
+      this.$store.dispatch('getBookmarkedPosts', {id: 2, page: ''})
     }
 }
 </script>
