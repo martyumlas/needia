@@ -56,7 +56,7 @@
               <div class="d-flex flex-column" >
                 <h3 v-if="user && !searchCategory &&  !searchString">Top Picks</h3>
                 <div class="row">
-                  <div class="col-lg-4 col-md-6 mb-4" v-for="post in posts.data" :key="post.id" >
+                  <div class="col-lg-4 col-md-6 mb-4"  v-for="post in !searchCategory &&  !searchString ? posts : posts.data "  :key="post.id" >
                     <div class="card h-100" :class="{'highlight' : post.highlight}">
                       <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -95,14 +95,14 @@
                     </div>
                   </div>
                 </div>
-                <Pagination :data="posts" @pagination-change-page="topPicks"/>
+                  <Pagination :data="posts" @pagination-change-page="topPicks" v-if="searchString || searchCategory"/>
               </div>
 
 
               <div class="d-flex flex-column" v-if="user && !searchCategory && !searchString" >
                   <h3 v-if="user">Latest Finds</h3>
                   <div class="row">
-                    <div class="col-lg-4 col-md-6 mb-4" v-for="post in latestFinds.data" :key="post.id" >
+                    <div class="col-lg-4 col-md-6 mb-4" v-for="post in latestFinds" :key="post.id" >
                       <div class="card h-100" :class="{'highlight' : post.highlight}">
                         <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                           <ol class="carousel-indicators">
@@ -140,7 +140,6 @@
                       </div>
                     </div>
                   </div>
-                  <Pagination :data="latestFinds" @pagination-change-page="latests"/>
               </div>
 
               <div class="d-flex flex-column" v-if="user && !searchCategory && !searchString
@@ -251,18 +250,18 @@ export default {
       clearSubCat(){
         this.$store.commit('setSearchSubCategoriesId', '')
         this.$store.commit('setSearchSubCategories', '')
-        this.$store.dispatch('fetchPost')
+        this.topPicks()
 
       //  this.$store.dispatch(this.postType == 1 ? 'getOffers' : 'getNeeds')
       },
       clearCat(){
         this.$store.commit('setSearchCategoryId', '')
         this.$store.commit('setSearchCategory', '')
-        this.$store.dispatch('fetchPost')
+        this.topPicks()
       },
       clearSearch(){
         this.$store.commit('setSearchString', '')
-        this.$store.dispatch('fetchPost')
+        this.topPicks()
         // this.clearFilters()
         // this.$store.dispatch(this.postType == 1 ? 'getOffers' : 'getNeeds')
       },
