@@ -77,7 +77,7 @@ const chat = {
         },
         async getMessages({rootGetters, commit}, payload){
             try {
-                const res = await axios.get('api/user/'+rootGetters.user.id+'/messages',{
+                const res = await axios.get('api/user/'+rootGetters.user.id+'/messages?page=' + payload.page,{
                     params:{
                         post_type : payload.post_type
                     }

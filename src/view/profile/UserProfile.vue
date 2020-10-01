@@ -16,13 +16,36 @@
         </li>
       </ul>
   </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+          <h2>Active Hours</h2>
+          <ul>
+            <li v-for="day in profile.active_hours" :key="day.id">
+              {{day.day}}
+              <span>{{day.opening}}</span> to <span>{{day.closing}}</span>
+            </li>
+          </ul>
+      </div>
+       <div class="col-md-6">
+         <h2>Business License</h2>
+         <ul >
+          <li v-for="doc in profile.documents" :key="doc.id">
+            {{doc.type}}
+            <img :src="baseUrl + doc.photo_url" alt="" width="200" height="200">
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
 </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    computed:mapGetters(['profile', 'baseUrl', 'user']),
+    computed:mapGetters(['profile', 'baseUrl', 'user', 'baseUrl']),
     mounted(){
       this.$store.dispatch('getUserProfile', this.$route.params.id)
     },

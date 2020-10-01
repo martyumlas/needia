@@ -155,15 +155,21 @@ const store = new Vuex.Store({
                 //     },
                 // ]
 
-                // var json_arr = JSON.stringify(days);
-                // form.append('days', json_arr)
+                var json_arr = JSON.stringify(payload.days);
+                form.append('days', json_arr)
+                for( var i = 0; i < payload.images.length; i++ ){
+                    let file = payload.images[i];
+                    form.append('images[' + i + ']', file);
+                }
+                form.append('documents', JSON.stringify(payload.documents))
                 form.append('_method','PATCH')
+
 
                 const res = await axios.post('api/user/' + payload.user.id, form)
                 commit('setMessage', res.data.message)
                 commit('setUser', res.data.user)
                 commit('setUpdateUser', res.data.user)
-                console.log(res.data)
+                router.push('/user-profile/' + payload.user.id)
 
             } catch (error) {
                 commit('setErrors', error.response.data.errors);
@@ -195,7 +201,6 @@ const store = new Vuex.Store({
             try {
                 const res = await axios.get('api/user/' + id)
                 commit('setProfile', res.data)
-                console.log(res.data)
             } catch (error) {
                console.log(error)
             }
