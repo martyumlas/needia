@@ -7,7 +7,13 @@
           <div class="card-header">
             <i class="material-icons" @click="handleEdit(post.id)">edit</i>
             <button class="close" @click="handleDelete(post.id)">&times;</button>
+            <hr>
+              <div v-if="post.post_insights.length">
+                <router-link :to="{path: '/post/' + post.id + '/insight'}">Insight</router-link>
+              </div>
+
           </div>
+
             <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
             <ol class="carousel-indicators">
               <li :data-target="'#post-'+post.id" v-for="(image, index) in post.images" :key="index" :data-slide-to="index" class="active"></li>
@@ -74,13 +80,15 @@ export default {
     data () {
       return {
         packages:[],
-        highlights: []
+        highlights: [],
+        insight: []
       }
     },
+
     methods:{
       getUsersPosts(page = 1){
         this.$store.dispatch('getUsersPost', {
-          id: 1, 
+          id: 1,
           page: page
         })
       },

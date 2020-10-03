@@ -31,6 +31,7 @@
          <h2>Business License</h2>
          <ul >
           <li v-for="doc in profile.documents" :key="doc.id">
+            <span class="close" v-if="user.id == profile.id" style="cursor: pointer" @click="deleteDoc(doc.id)">x</span>
             {{doc.type}}
             <img :src="baseUrl + doc.photo_url" alt="" width="200" height="200">
           </li>
@@ -44,6 +45,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
 export default {
     computed:mapGetters(['profile', 'baseUrl', 'user', 'baseUrl']),
     mounted(){
@@ -52,6 +54,9 @@ export default {
     methods:{
       reportUser() {
 
+      },
+      deleteDoc(id){
+        this.$store.dispatch('deleteDoc', id)
       }
     }
 

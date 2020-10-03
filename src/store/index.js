@@ -76,8 +76,6 @@ const store = new Vuex.Store({
 
                     }, 10000);
 
-
-
                 }
 
 
@@ -136,34 +134,11 @@ const store = new Vuex.Store({
                 form.delete('photo_extension')
                 form.delete('photo_url')
                 form.delete('fcm_notification_key')
-
-                // let days = [
-                //     {
-                //         day: 'monday',
-                //         opening: '7:00',
-                //         closing: '7:00'
-                //     },
-                //     {
-                //         day: 'tuesday',
-                //         opening: '7:00',
-                //         closing: '7:00'
-                //     },
-                //     {
-                //         day: 'wednesday',
-                //         opening: '8:00',
-                //         closing: '8:00'
-                //     },
-                // ]
-
-                var json_arr = JSON.stringify(payload.days);
-                form.append('days', json_arr)
-                for( var i = 0; i < payload.images.length; i++ ){
-                    let file = payload.images[i];
-                    form.append('images[' + i + ']', file);
-                }
+                form.delete('active_hours')
+                form.append('days',  JSON.stringify(payload.days))
                 form.append('documents', JSON.stringify(payload.documents))
+                form.append('document_image', payload.document_image)
                 form.append('_method','PATCH')
-
 
                 const res = await axios.post('api/user/' + payload.user.id, form)
                 commit('setMessage', res.data.message)
@@ -214,6 +189,16 @@ const store = new Vuex.Store({
                 console.log(error)
             }
         },
+        async deleteDoc({commit,state}, id){
+            try {
+                const res = await axios.delete('api/user/'+state.user.id+'/document/' + id )
+                commit('setProfile', res.data)
+            } catch (error) {
+                console.log(error)
+            }
+
+
+        },
          getToken({commit}){
              messaging.requestPermission().then(function(){
                 console.log('have permission')
@@ -240,7 +225,6 @@ const store = new Vuex.Store({
                 console.log(res.data)
             } catch (error) {
                 console.log(error)
-
                 // dispatch('registerToken')
             }
         },

@@ -73,10 +73,6 @@ const post = {
                     commit('setPosts', res.data.top_picks)
                     commit('setRelatedPosts', res.data.by_category_picks)
                     commit('setLatestFinds', res.data.latest_finds)
-
-
-
-                    console.log(res.data)
                 }else{
                     const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
                         params: {
@@ -100,7 +96,6 @@ const post = {
             }
         },
         async getUsersPost({commit, rootGetters}, payload){
-            console.log(payload)
             commit('setLoader', true)
             try {
                 const res = await axios.get('api/post/user/' + rootGetters.user.id + '?page=' + payload.page, {
@@ -111,8 +106,6 @@ const post = {
                 })
                 commit('setUsersPost', res.data)
                 commit('setLoader', false)
-
-                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -175,7 +168,6 @@ const post = {
                 form.delete('bookmarks')
                 form.delete('transactions')
                 form.delete('boost')
-
                 form.append('_method', 'PATCH')
                 form.delete('created_at')
                 form.delete('updated_at')

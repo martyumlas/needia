@@ -56,7 +56,7 @@
               <div class="d-flex flex-column" >
                 <h3 v-if="user && !searchCategory &&  !searchString">Top Picks</h3>
                 <div class="row">
-                  <div class="col-lg-4 col-md-6 mb-4"  v-for="post in !searchCategory &&  !searchString ? posts : posts.data "  :key="post.id" >
+                  <div class="col-lg-4 col-md-6 mb-4"  v-for="post in !searchCategory &&  !searchString  ? posts : posts.data "  :key="post.id" >
                     <div class="card h-100" :class="{'highlight' : post.highlight}">
                       <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -78,7 +78,7 @@
                       </div>
                       <div class="card-body">
                         <h4 class="card-title">
-                          <router-link :to="{name: 'Post', params:{id: post.id}}">{{post.title ? post.title : post.brand}}</router-link>
+                          <a  @click="clickInsight(post.id)" href="#" >{{post.title ? post.title : post.brand}}</a>
                         </h4>
                         <h5>{{parseFloat(post.price)}}</h5>
                         <p class="card-text">{{post.description}}</p>
@@ -217,10 +217,19 @@ import Loader from '../../components/Loader'
 import FilterPost from '../../components/Filter'
 import Users from '../../components/Users'
 import Pagination from 'laravel-vue-pagination'
+import axios from 'axios'
 export default {
     components:{Categories, Loader, FilterPost, Users, Pagination},
     computed:mapGetters(['posts','user', 'baseUrl', 'searchString', 'loading', 'searchSubCategory', 'users', 'filterType', 'postType', 'searchCategory', 'relatedPosts', 'latestFinds']),
     methods:{
+      clickInsight(id) {
+        axios.post('api/post/' + id + '/insights', {
+          clicks : 1
+        }).then(res => console.log(res.data))
+        .catch(e => console.log(e))
+        this.$router.push('/post/'+id)
+       // :to="{name: 'Post', params:{id: post.id}}"
+      },
       topPicks(page = 1) {
         if(this.searchString || this.searchCategory) {
            this.$store.dispatch('getPosts', page)

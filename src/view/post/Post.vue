@@ -8,11 +8,14 @@
         <div class="card mt-4">
           <span v-if="post.user.id !== user.id" class="d-flex mt-2 justify-content-between">
             <button class="btn btn-primary ml-2" @click="reportPost">Report Post</button>
-            <span class="d-flex justify-content-end" v-if="!post.bookmarks.length">
+            <!-- <span class="d-flex justify-content-end" v-if="!post.bookmarks.length">
               <i class="material-icons" @click="handleBookmark(post)">bookmark</i>
             </span>
             <span class="d-flex justify-content-end"  v-for="bookmark in post.bookmarks" :key="bookmark.id" v-else>
               <i class="material-icons" :class="{'text-danger' : bookmark.user_id === user.id ?  bookmark.is_bookmarked : ''}" @click="handleBookmark(post)">bookmark</i>
+            </span> -->
+            <span>
+              <i class="material-icons" :class="{'text-danger' : is_bookmarked == 1 }" @click="handleBookmark">bookmark</i>
             </span>
           </span>
 
@@ -81,34 +84,33 @@
 <script>
 import Loader from '../../components/Loader'
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 export default {
     components:{Loader},
     computed:mapGetters(['post', 'baseUrl', 'user','messages','baseUrl', 'loading']),
     data(){
       return {
+        is_bookmarked: ''
       }
     },
     methods:{
-      handleBookmark(post){
-        if(post.bookmarks.length){
-          post.bookmarks.filter(bookmark => {
-            if(bookmark.user_id == this.user.id){
-              this.$store.dispatch('bookmark', {
-                id: post.id,
-                bookmark: !bookmark.is_bookmarked
-              })
-            }
-          })
-        }else{
-           this.$store.dispatch('bookmark', {
-            id: post.id,
-            bookmark: 1
-          })
-        }
+      handleBookmark(){
+        axios.post('api/post/'+this.post.id+'/user/'+this.user.id+'/bookmark', {
+          bookmark : this.is_bookmarked == 0 ? 1 : 0
+        }).then(res => this.is_bookmarked = res.data.bookmark)
+        .catch(e => console.log(e))
+          axios.post('api/post/' + this.post.id + '/insights', {
+              saved_posts : 1
+            }).then(res => console.log(res.data))
+            .catch(e => console.log(e))
       },
       handleSendMessage(){
         this.$store.commit('reply', false)
         this.$store.commit('contact', '')
+          axios.post('api/post/' + this.post.id + '/insights', {
+          chats : 1
+        }).then(res => console.log(res.data))
+        .catch(e => console.log(e))
         this.$router.push('/chat')
       },
       openThread(){
@@ -121,10 +123,13 @@ export default {
     mounted(){
       this.$store.dispatch('getPost', this.$route.params.id)
 
+      axios.get('api/post/'+this.post.id+'/user/'+this.user.id+'/bookmark')
+      .then(res => {this.is_bookmarked = res.data})
+      .catch(e => console.log(e))
+
     setTimeout(() => {
       this.$store.dispatch('postMessages')
     },5000)
-
 
     }
 }

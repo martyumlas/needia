@@ -4,6 +4,7 @@ import Post from '../../view/post/Post'
 import Chat from '../../components/Chat'
 import Review from '../../components/Review'
 import ReportPost from '../../components/ReportPost'
+import PostInsights from '../../components/PostInsights'
 
 const post = [
     {
@@ -41,6 +42,14 @@ const post = [
         path : '/review/:post_id/:transaction_id',
         component: Review,
         name: 'Review',
+        meta: {
+            requiresAuth: true
+          },
+    },
+    {
+        path : '/post/:id/insight',
+        component: PostInsights,
+        name: 'PostInsight',
         meta: {
             requiresAuth: true
           },

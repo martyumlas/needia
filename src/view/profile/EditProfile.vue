@@ -49,6 +49,10 @@
           <input type="text" class="form-control" id="date_of_birth" placeholder="Location" v-model="updateUser.location">
         </div>
         <div class="form-group">
+          <label for="date_of_birth">Shop Address</label>
+          <input type="text" class="form-control" id="date_of_birth" placeholder="Location" v-model="updateUser.shop_address">
+        </div>
+        <div class="form-group">
           <label for="bio">Bio</label>
           <textarea class="form-control" v-model="updateUser.bio" placeholder="Bio" ></textarea>
         </div>
@@ -65,8 +69,21 @@
             <input type="text" :id="'closing-' + index" v-model="day.closing" >
         </li>
       </ul>
-      
-      <div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+          <img :src="docPreview" alt="" class="img-fluid mb-3" width="200" height="200" v-if="docPreview"><br>
+          <input type="file"  @change="onDocChange">
+        </div>
+        <div class="form-group">
+          <label for="">Document/Type</label>
+          <input type="text" class="form-control" v-model="documents.type">
+        </div>
+        <div class="form-group">
+          <label for="">Permit/Document Number</label>
+          <input type="text" class="form-control" v-model="documents.number">
+        </div>
+      </div>
+      <!-- <div class="row">
           <div class="col-md-12" v-for="doc in documents" :key="doc.id">
             <div class="form-group">
                <img :src="preview" alt="" class="rounded-circle">
@@ -82,7 +99,7 @@
             </div>
           </div>
           <button class="btn btn-primary" @click="addInput">Add</button>
-      </div>
+      </div> -->
       <button type="submit" class="btn btn-primary float-right mt-4">Update Profile</button>
 
 
@@ -100,6 +117,8 @@ export default {
       preview: '',
       days:[],
       counter: 0,
+      docImage: '',
+      docPreview:'',
       images: [],
       // documents: [{
       //   id: '0',
@@ -107,7 +126,7 @@ export default {
       //   type: '',
       //   img: '',
       // }],
-      documents: [],
+      documents: {},
 
       activeDays: [
         {day: 'Sunday', opening: '7:00', closing: '7:00'},
@@ -132,7 +151,14 @@ export default {
   },
   methods:{
     onDocChange(e) {
-        this.images.push(e.target.files[0])
+        // this.images.push(e.target.files[0])
+        this.docImage = e.target.files[0]
+        let reader = new FileReader();
+        let vm = this;
+        reader.onload = (e) => {
+            vm.docPreview = e.target.result;
+        };
+        reader.readAsDataURL(this.docImage);
     },
      addInput(e) {
       e.preventDefault()
@@ -153,7 +179,8 @@ export default {
       }
     },
     handleUpdateProfile(){
-      this.$store.dispatch('updateUser', {user: this.updateUser, image: this.image, days: this.days, documents: this.documents, images: this.images})
+
+      this.$store.dispatch('updateUser', {user: this.updateUser, image: this.image, days: this.days, documents: this.documents, document_image : this.docImage})
 
     },
     onImageChange(e){
