@@ -1,6 +1,9 @@
 <template>
 <div class="container">
-    <canvas id="my-chart" width="500" height="300"></canvas>
+    <h3>{{post.title ? post.title : post.brand}}</h3>
+    <canvas id="my-chart" width="500" height="300" class="mt-4"></canvas>
+    <p>push : <span>{{post.boost_left.days}} days</span> and {{post.boost_left.hours}} hours</p>
+    <p>highlight : <span>{{post.highlight_left.days}} days</span> and {{post.highlight_left.hours}} hours</p>
 </div>
 </template>
 
@@ -54,6 +57,16 @@ export default {
             data: this.saved_posts
           }
         ]
+      },
+        options: {
+          responsive: true,
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
       }
     });
 

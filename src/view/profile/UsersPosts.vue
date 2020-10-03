@@ -11,7 +11,6 @@
               <div v-if="post.post_insights.length">
                 <router-link :to="{path: '/post/' + post.id + '/insight'}">Insight</router-link>
               </div>
-
           </div>
 
             <div :id="'post-'+post.id" class="carousel slide my-4" data-ride="carousel">
@@ -54,7 +53,7 @@
                   <p class="btn btn-danger"  @click="boostPost(post)" data-toggle="modal" data-target="#exampleModal"  v-else>Boosted</p>
               </div>
               <div v-if="!post.is_expired">
-                <button class="btn btn-success"  @click="highlightPost(post)" data-toggle="modal" data-target="#highlightsModal" v-if="!post.highlight">Highlight</button>
+                <button class="btn btn-success"  @click="highlightPost(post)" data-toggle="modal" data-target="#highlightsModal" >Highlight</button>
               </div>
             </div>
           </div>
