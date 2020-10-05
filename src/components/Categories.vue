@@ -27,7 +27,7 @@ export default {
       this.$store.commit('setLong', '')
       this.$store.commit('setDistance', '')
       this.$store.commit('setCity', '')
-      this.$store.dispatch('getPosts')
+      this.$store.dispatch('getPosts', {})
     },
     setCategory(category){
       this.$store.commit('setSearchCategory', category.title)
@@ -35,7 +35,7 @@ export default {
       this.$store.commit('setLat', '')
       this.$store.commit('setLong', '')
       this.$store.commit('setDistance', '')
-      this.$store.dispatch('getPosts')
+      this.$store.dispatch('getPosts', {})
     }
   },
   mounted(){

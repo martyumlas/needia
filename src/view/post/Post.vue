@@ -95,22 +95,17 @@ export default {
     },
     methods:{
       handleBookmark(){
+        this.user ?
         axios.post('api/post/'+this.post.id+'/user/'+this.user.id+'/bookmark', {
           bookmark : this.is_bookmarked == 0 ? 1 : 0
         }).then(res => this.is_bookmarked = res.data.bookmark)
         .catch(e => console.log(e))
-          axios.post('api/post/' + this.post.id + '/insights', {
-              saved_posts : 1
-            }).then(res => console.log(res.data))
-            .catch(e => console.log(e))
+        :
+        this.$router.push('/login')
       },
       handleSendMessage(){
         this.$store.commit('reply', false)
         this.$store.commit('contact', '')
-          axios.post('api/post/' + this.post.id + '/insights', {
-          chats : 1
-        }).then(res => console.log(res.data))
-        .catch(e => console.log(e))
         this.$router.push('/chat')
       },
       openThread(){
@@ -123,9 +118,12 @@ export default {
     mounted(){
       this.$store.dispatch('getPost', this.$route.params.id)
 
-      axios.get('api/post/'+this.post.id+'/user/'+this.user.id+'/bookmark')
-      .then(res => {this.is_bookmarked = res.data})
-      .catch(e => console.log(e))
+      if(this.user) {
+        axios.get('api/post/'+this.post.id+'/user/'+this.user.id+'/bookmark')
+          .then(res => {this.is_bookmarked = res.data})
+          .catch(e => console.log(e))
+      }
+
 
     setTimeout(() => {
       this.$store.dispatch('postMessages')

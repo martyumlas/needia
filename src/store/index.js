@@ -136,8 +136,6 @@ const store = new Vuex.Store({
                 form.delete('fcm_notification_key')
                 form.delete('active_hours')
                 form.append('days',  JSON.stringify(payload.days))
-                form.append('documents', JSON.stringify(payload.documents))
-                form.append('document_image', payload.document_image)
                 form.append('_method','PATCH')
 
                 const res = await axios.post('api/user/' + payload.user.id, form)

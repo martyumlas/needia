@@ -62,6 +62,7 @@
     </div>
     <Pagination :data='usersPost'  @pagination-change-page="getUsersPosts"/>
     <Modal :packages='packages'/>
+    
     <HighlightModal :highlights='highlights'/>
   </div>
 </template>

@@ -70,18 +70,22 @@
         </li>
       </ul>
     <div class="col-md-12">
+      <form @submit='handleSubmitDocuments'>
         <div class="form-group">
           <img :src="docPreview" alt="" class="img-fluid mb-3" width="200" height="200" v-if="docPreview"><br>
           <input type="file"  @change="onDocChange">
         </div>
         <div class="form-group">
           <label for="">Document/Type</label>
-          <input type="text" class="form-control" v-model="documents.type">
+          <input type="text" class="form-control" v-model="type">
         </div>
         <div class="form-group">
           <label for="">Permit/Document Number</label>
-          <input type="text" class="form-control" v-model="documents.number">
+          <input type="text" class="form-control" v-model="number">
         </div>
+
+        <button class="btn btn-primary">Submit</button>
+        </form>
       </div>
       <!-- <div class="row">
           <div class="col-md-12" v-for="doc in documents" :key="doc.id">
@@ -110,6 +114,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 export default {
   data(){
     return{
@@ -119,6 +124,8 @@ export default {
       counter: 0,
       docImage: '',
       docPreview:'',
+      type: '',
+      number: '',
       images: [],
       // documents: [{
       //   id: '0',
@@ -150,6 +157,16 @@ export default {
 
   },
   methods:{
+    handleSubmitDocuments(e){
+      e.preventDefault()
+
+
+      let form = new FormData
+      form.append('type', this.type)
+      form.append('number', this.number)
+      form.append('image', this.docImage)
+      axios.post('api/user/' + this.updateUser.id + '/document', form).then(res => this.$router.push('/user-profile/' + res.data.id));
+    },
     onDocChange(e) {
         // this.images.push(e.target.files[0])
         this.docImage = e.target.files[0]
@@ -180,7 +197,7 @@ export default {
     },
     handleUpdateProfile(){
 
-      this.$store.dispatch('updateUser', {user: this.updateUser, image: this.image, days: this.days, documents: this.documents, document_image : this.docImage})
+      this.$store.dispatch('updateUser', {user: this.updateUser, image: this.image, days: this.days})
 
     },
     onImageChange(e){

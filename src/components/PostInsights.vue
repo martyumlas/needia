@@ -17,7 +17,8 @@ export default {
             labels: [],
             clicks:[],
             chats:[],
-            saved_posts:[]
+            saved_posts:[],
+            impressions:[]
         }
     },
     methods:{
@@ -30,6 +31,7 @@ export default {
       this.labels.push(insight.interaction_date)
       this.clicks.push(insight.clicks)
       this.chats.push(insight.chats)
+      this.impressions.push(insight.impressions)
       this.saved_posts.push(insight.saved_posts)
     })
 
@@ -55,7 +57,14 @@ export default {
             backgroundColor: 'rgb(255, 10, 10)',
             borderColor: 'rgb(255, 10, 10)',
             data: this.saved_posts
-          }
+          },
+          {
+            label: 'impressions',
+           backgroundColor: 'rgb(0,0,0)',
+            borderColor: 'rgb(0,0, 0)',
+            data: this.impressions
+          },
+
         ]
       },
         options: {

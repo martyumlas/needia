@@ -73,7 +73,7 @@ export default {
     },
   methods:{
     handleSearch(){
-        this.$store.dispatch('getPosts')
+        this.$store.dispatch('getPosts', {})
     },
     handleSearchString(){
         this.$store.commit('setSearchString', this.search_string)

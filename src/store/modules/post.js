@@ -61,6 +61,7 @@ const post = {
     },
     actions:{
         async fetchPost({commit, rootGetters, state}, payload){
+            commit('setLoader', true)
             try {
                 if(rootGetters.user){
                     const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
@@ -73,17 +74,21 @@ const post = {
                     commit('setPosts', res.data.top_picks)
                     commit('setRelatedPosts', res.data.by_category_picks)
                     commit('setLatestFinds', res.data.latest_finds)
+                    commit('setLoader', false)
+                    console.log(res.data)
                 }else{
+                    commit('setLoader', true)
                     const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
                         params: {
                             post_type : state.postType
                         }
                     })
                     commit('setPosts', res.data.top_picks)
+                    commit('setLoader', false)
                 }
 
             } catch (error) {
-                console.log(error)
+                console.log(error.response)
             }
         },
         async getNeeds({commit}){
@@ -256,9 +261,8 @@ const post = {
             }
         },
 
-        async getPosts({commit, state, dispatch, rootGetters}, page)
-        {            console.log(page)
-            // commit('setLoader', true)
+        async getPosts({commit, state, dispatch, rootGetters}, page){
+            commit('setLoader', true)
             try {
                 const res = await axios.get('api/posts?page=' + page, {
                     params:{
@@ -288,8 +292,11 @@ const post = {
 
                 if(state.filterType === 'profile'){
                     commit('setUsers', res.data)
+                    commit('setLoader', false)
                 }else{
                     commit('setPosts', res.data)
+                    console.log(res.data)
+                    commit('setLoader', false)
                 }
 
             // commit('setLoader', false)
