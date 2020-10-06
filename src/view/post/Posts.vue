@@ -50,17 +50,15 @@
             <div v-else>
                <PostContent @clickInsight="clickInsight"  :posts='posts' @topPicks='topPicks'  :type='2'/>
             </div>
-
-
           </div>
            <div v-else-if="users && filterType == '2' || filterType == '3'">
             <Users/>
           </div>
 
-          <div class="row container" v-if="!posts.length">
+          <!-- <div class="row container" v-if="!post.length">
             <h2 v-if="searchString">NO LISTING FOUND FOR {{searchString}}</h2>
             <h2 v-else>NO LISTING FOUND</h2>
-          </div>
+          </div> -->
         </div>
       </div>
   </div>
