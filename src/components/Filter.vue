@@ -109,15 +109,15 @@ export default {
             types: [
                 {
                     name: 'Posts',
-                    value: 'post'
+                    value: '1'
                 },
                 {
                     name: 'Profile',
-                    value: 'profile'
+                    value: '2'
                 },
                 {
                     name: 'Business',
-                    value: 'business'
+                    value: '3'
                 },
             ],
             filters: [

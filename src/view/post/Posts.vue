@@ -24,7 +24,7 @@
               </span>
             </p>
 
-          <div v-if="posts && filterType == 'post'">
+          <div v-if="posts && filterType == '1'">
 
             <div v-if="user">
               <Loader v-if="loading"/>
@@ -53,11 +53,11 @@
 
 
           </div>
-           <div v-else-if="users.length && filterType == 'profile' || filterType == 'business'">
+           <div v-else-if="users && filterType == '2' || filterType == '3'">
             <Users/>
           </div>
 
-          <div class="row container" v-else>
+          <div class="row container" v-if="!posts.length">
             <h2 v-if="searchString">NO LISTING FOUND FOR {{searchString}}</h2>
             <h2 v-else>NO LISTING FOUND</h2>
           </div>
@@ -127,7 +127,7 @@ export default {
         this.$store.commit('setSearchSubCategories', '')
         this.$store.commit('setSearchCategoryId', '')
         this.$store.commit('setSearchCategory', '')
-        this.$store.commit('setFilterType', 'post')
+        this.$store.commit('setFilterType', '1')
         this.$store.commit('setUsers', '')
         this.$store.commit('setCondition', '')
         this.$store.commit('setModeOfShipping', '')

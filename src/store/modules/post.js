@@ -16,7 +16,7 @@ const post = {
         searches: [],
         sortBy: '',
         sortDirection : 'ASC',
-        filterType : 'post',
+        filterType : '1',
         users : [],
         condition: '',
         mode_of_shipping: '',
@@ -262,7 +262,7 @@ const post = {
         },
 
         async getPosts({commit, state, dispatch, rootGetters}, page){
-            commit('setLoader', true)
+            //commit('setLoader', true)
             try {
                 const res = await axios.get('api/posts?page=' + page, {
                     params:{
@@ -290,13 +290,13 @@ const post = {
                 }
                 console.log(res.data)
 
-                if(state.filterType === 'profile'){
+                if(state.filterType > '1'){
                     commit('setUsers', res.data)
-                    commit('setLoader', false)
+                  //  commit('setLoader', false)
                 }else{
                     commit('setPosts', res.data)
                     console.log(res.data)
-                    commit('setLoader', false)
+                   // commit('setLoader', false)
                 }
 
             // commit('setLoader', false)
@@ -348,8 +348,6 @@ const post = {
                 })
 
                 commit('setRecentSearches', res.data)
-
-                console.log(res.data)
 
             } catch (error) {
                 console.log(error)
