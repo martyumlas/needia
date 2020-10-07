@@ -198,7 +198,7 @@ const store = new Vuex.Store({
 
         },
          getToken({commit}){
-             messaging.requestPermission().then(function(){
+             messaging.getToken().then(function(){
                 console.log('have permission')
                 return messaging.getToken()
             }).then(function(token){
