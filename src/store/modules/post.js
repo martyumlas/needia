@@ -64,18 +64,19 @@ const post = {
             commit('setLoader', true)
             try {
                 if(rootGetters.user){
-                    const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
+                  await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
                         params: {
                             user_id :  rootGetters.user.id,
                             post_type : state.postType
                         }
-                    })
+                    }).then((res) => {
+                        commit('setPosts', res.data.top_picks)
+                        commit('setRelatedPosts', res.data.by_category_picks)
+                        commit('setLatestFinds', res.data.latest_finds)
 
-                    commit('setPosts', res.data.top_picks)
-                    commit('setRelatedPosts', res.data.by_category_picks)
-                    commit('setLatestFinds', res.data.latest_finds)
+                    })
                     commit('setLoader', false)
-                    console.log(res.data)
+
                 }else{
                     commit('setLoader', true)
                     const res = await axios.get('api/post-offers-needs?'+  payload.title + '=' + payload.page, {
@@ -88,7 +89,7 @@ const post = {
                 }
 
             } catch (error) {
-                console.log(error.response)
+                console.log(error)
             }
         },
         async getNeeds({commit}){

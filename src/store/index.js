@@ -26,7 +26,8 @@ const store = new Vuex.Store({
         updateUser: '',
         profile: '',
         token: '',
-        basicAuth: ''
+        basicAuth: '',
+        tokenRegistrationError: ''
 
     },
     mutations:{
@@ -39,7 +40,9 @@ const store = new Vuex.Store({
         setUpdateUser:(state, user) => state.updateUser =  user,
         setToken : (state, token) => state.token = token,
         setBaseUrl : (state, url) => state.baseUrl =url,
-        setBasicAuth :(state, basicAuth) => state.basicAuth = basicAuth
+        setBasicAuth :(state, basicAuth) => state.basicAuth = basicAuth,
+        tokenRegistrationError: (state, error) => state.tokenRegistrationError = error
+
     },
     actions:{
         async register({commit}, payload)
@@ -66,33 +69,60 @@ const store = new Vuex.Store({
                 }else{
                     commit('setUser', res.data.user)
                     commit('isLoggedIn', true)
-                    router.push('/')
-
-                    dispatch('getToken')
-
-                    setTimeout(() => {
-
-                        dispatch('registerToken')
-
-                    }, 10000);
-
+                    dispatch('getToken').then(dispatch('registerToken')).then(router.push('/'))
                 }
-
-
-
             } catch (error) {
                commit('setErrors', error.response.data.errors);
                console.log(error )
             }
         },
-        logout({commit, dispatch}){
 
+        getToken({commit}){
+            messaging.getToken().then(function(){
+               console.log('have permission')
+               return messaging.getToken()
+           }).then(function(token){
+               console.log(token)
+               commit('setToken', token)
+           })
+           .catch(function(err){
+               console.log(err)
+           })
+           messaging.onMessage(function(payload){
+               console.log('onMessage', payload)
+           })
+       },
+       async registerToken({commit, rootGetters, state}){
+        commit('tokenRegistrationError', '')
+           try {
+               const res = await axios.post('api/users/'+rootGetters.user.id+'/fcm_registration_tokens',{
+                   registration_id : state.token
+               })
+               console.log(res.data)
+           } catch (error) {
+               commit('tokenRegistrationError', error.response.data.message)
+                console.log(error.response.data.message)
+           }
+       },
+       async removeToken({rootGetters, state, }){
+           try {
+               const res = await axios.delete('api/users/'+rootGetters.user.id+'/fcm_registration_tokens',{
+                   data:{
+                       registration_id : state.token
+                   }
+               })
+               console.log(res.data)
+           } catch (error) {
+               console.log(error)
+
+           }
+       },
+        logout({commit, dispatch}){
             dispatch('removeToken')
-            commit('isLoggedIn', false)
-            commit('setUser','')
-            commit('setToken', '')
-            dispatch('fetchPost')
-            router.push('/')
+            .then(commit('isLoggedIn', false))
+            .then(commit('setUser', ''))
+            .then('setToken', '')
+            .then(dispatch('fetchPost', {})).then(router.push('/'))
 
         },
         async resetPassword({commit}, payload){
@@ -197,50 +227,7 @@ const store = new Vuex.Store({
 
 
         },
-         getToken({commit}){
-             messaging.getToken().then(function(){
-                console.log('have permission')
-                return messaging.getToken()
-            }).then(function(token){
-                console.log(token)
-                commit('setToken', token)
-            })
-            .catch(function(err){
-                console.log(err)
-            })
 
-
-            messaging.onMessage(function(payload){
-                console.log('onMessage', payload)
-            })
-        },
-        async registerToken({rootGetters, state}){
-            try {
-                const res = await axios.post('api/users/'+rootGetters.user.id+'/fcm_registration_tokens',{
-                    registration_id : state.token
-                })
-
-                console.log(res.data)
-            } catch (error) {
-                console.log(error)
-                // dispatch('registerToken')
-            }
-        },
-        async removeToken({rootGetters, state, }){
-            try {
-                const res = await axios.delete('api/users/'+rootGetters.user.id+'/fcm_registration_tokens',{
-                    data:{
-                        registration_id : state.token
-                    }
-                })
-
-                console.log(res.data)
-            } catch (error) {
-                console.log(error)
-
-
-            }
-        },
     },
     getters:{
         user : (state) => state.user,
@@ -251,7 +238,8 @@ const store = new Vuex.Store({
         baseUrl : (state) => state.baseUrl,
         updateUser: (state) => state.updateUser,
         profile: (state) => state.profile,
-        basicAuth : (state) => state.basicAuth
+        basicAuth : (state) => state.basicAuth,
+        tokenRegistrationError : (state) => state.tokenRegistrationError
     }
 })
 

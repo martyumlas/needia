@@ -23,10 +23,19 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'App',
   components:{Navbar},
-  computed:mapGetters(['baseUrl','user', 'basicAuth']),
+  computed:mapGetters(['baseUrl','user', 'basicAuth', 'tokenRegistrationError']),
+  methods:{
+    register(){
+      this.$store.dispatch('registerToken')
+    }
+  },
   mounted(){
-    // this.$store.dispatch('registerToken')
-      window.Pusher = require('pusher-js');
+
+
+    if(this.tokenRegistrationError != '') {
+      this.register();
+    }
+    window.Pusher = require('pusher-js');
     if(this.user){
 
       window.Echo = new Echo({

@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </div>
-            <Pagination :data="posts" @pagination-change-page="topPicks"/>
+            <Pagination :data="posts" @pagination-change-page="topPicks" v-if="posts.length"/>
         </div>
         <div class="d-flex flex-column" v-else-if="type == 3">
             <h3>{{title}}</h3>
@@ -197,6 +197,14 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+i{
+  cursor: pointer;
+}
+.searches{
+  font-size: 3rem;
+}
+.highlight{
+  border: 10px solid blue
+}
 </style>
