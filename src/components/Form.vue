@@ -36,10 +36,16 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="sub_categories">Subcategory</label>
-                <select id="sub_categories" class="form-control" v-model="post.sub_category_id" >
+                <select id="sub_categories" class="form-control" v-model="post.sub_category_id" @change="selectSubCat">
                     <option selected v-for="sub_categories in sub_categories" :key="sub_categories.id"  :value="sub_categories.id">{{sub_categories.title}}</option>
                 </select>
             </div>
+             <ul v-if="isEditing">
+                <li v-for="item in post.sub_category" :key="item.id">{{item.title}}</li>
+            </ul>
+            <ul>
+                <li v-for="(item, index) in subcats" :key="index">{{item}}</li>
+            </ul>
         </div>
         <div class="form-group" v-if="typeId !== 4">
             <label for="title">Title</label>
@@ -202,11 +208,21 @@ export default {
             transmission: ['manual', 'automatic'],
             fuel: ['gasoline', 'diesel', 'hybrid', 'electric', 'other'],
             images: [],
+            subCat: [],
+            subcats: []
         }
     },
     computed:mapGetters(['categories', 'typeId','postType', 'post', 'isEditing','baseUrl', 'subCategories']),
     methods:{
+        selectSubCat(){
+           this.subCat.push(this.post.sub_category_id)
+            this.sub_categories.map(sub => {
+                this.post.sub_category_id === sub.id  ? this.subcats.push(sub.title) : ''
+            })
+            console.log(this.subCat)
+        },
         setSubcategories(){
+            this.subcats = []
             this.categories.filter(category => {
                 if(this.post.category_id === category.id){
                     this.sub_categories = category.sub_categories
@@ -216,9 +232,9 @@ export default {
         },
         handlePost(){
             if(this.isEditing){
-                this.$store.dispatch('editPost', {post: this.post, images: this.images, postImages : this.post.images})
+                this.$store.dispatch('editPost', {post: this.post, images: this.images, postImages : this.post.images, sub_categories: this.subCat})
             }else{
-                this.$store.dispatch('createPost', {post: this.post, images: this.images})
+                this.$store.dispatch('createPost', {post: this.post, images: this.images, sub_categories: this.subCat})
             }
         },
         onFileChange(e) {

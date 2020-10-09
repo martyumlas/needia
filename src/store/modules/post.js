@@ -116,7 +116,7 @@ const post = {
                 console.log(error)
             }
         },
-        async createPost({commit, rootGetters, state, dispatch}, payload){
+        async createPost({commit, rootGetters, state}, payload){
             commit('setMessage', '')
             commit('setErrors', '')
             try {
@@ -134,18 +134,22 @@ const post = {
                 form.append('user_id', rootGetters.user.id)
                 form.append('post_type', state.postType)
                 form.append('offer_need_type_id', rootGetters.typeId)
+                form.delete('sub_category_id')
+                form.append('sub_categories', JSON.stringify( payload.sub_categories))
+
+                console.log(...form)
 
                 const res = await axios.post('api/post', form)
                 commit('setMessage', res.data.message)
+                console.log(res.data)
 
-
-                if(state.postType == 1){
-                    router.push('/profile')
-                    dispatch('getUsersPost', state.postType)
-                }else{
-                    router.push('/my-needs')
-                    dispatch('getUsersPost', state.postType)
-                }
+                // if(state.postType == 1){
+                //     router.push('/profile')
+                //     dispatch('getUsersPost', state.postType)
+                // }else{
+                //     router.push('/my-needs')
+                //     dispatch('getUsersPost', state.postType)
+                // }
 
             } catch (error) {
                 console.log(error)
@@ -179,7 +183,12 @@ const post = {
                 form.delete('updated_at')
                 form.delete('user')
                 form.delete('category')
+                form.delete('boost_left')
+                form.delete('highlight')
+                form.delete('highlight_left')
+                form.delete('post_insights')
                 form.delete('sub_category')
+                form.append('sub_categories', JSON.stringify( payload.sub_categories))
 
                 const res = await axios.post('api/post/' + payload.post.id, form)
                 commit('setMessage', res.data.message)

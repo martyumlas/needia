@@ -8,7 +8,7 @@
             <h3>{{post.user.username}}</h3>
             <h5>{{post.price}}</h5>
             <button class="btn btn-primary" @click="proceedWithDeal" v-if="post.user.id == user.id" :class="{'disabled' : transaction_status === 2}">{{transaction_status == 1 ? "Mark As Sold" : transaction_status == 2 ? 'Sold' : 'Proceed with deal'}}</button>
-            <button class="btn btn-primary ml-3" v-if="transaction_status == 1 && post.user_id === user.id" @click="cancelDeal">Cancel Deal</button>
+            <button class="btn btn-primary ml-3" v-if="transaction_status == 1" @click="cancelDeal">Cancel Deal</button>
             <button class="btn btn-primary ml-3" v-if="transaction_status == 2" @click="handleReview">Leave a review</button>
         </div>
         <div class="card-body d-flex flex-column justify-content-between">

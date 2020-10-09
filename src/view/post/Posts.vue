@@ -24,7 +24,7 @@
               </span>
             </p>
 
-          <div v-if="posts && filterType == '1'">
+          <div v-if="filterType === '1'">
 
             <div v-if="user">
               <Loader v-if="loading"/>
@@ -51,7 +51,7 @@
                <PostContent @clickInsight="clickInsight"  :posts='posts' @topPicks='topPicks'  :type='2'/>
             </div>
           </div>
-           <div v-else-if="users && filterType == '2' || filterType == '3'">
+           <div  v-if="filterType > '1'">
             <Users/>
           </div>
 
@@ -116,8 +116,7 @@ export default {
       clearSearch(){
         this.$store.commit('setSearchString', '')
         this.$store.dispatch('fetchPost', {})
-        // this.clearFilters()
-        // this.$store.dispatch(this.postType == 1 ? 'getOffers' : 'getNeeds')
+        this.clearFilters()
       },
       clearFilters(){
         this.$store.commit('setSearchString', '')
