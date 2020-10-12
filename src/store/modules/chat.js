@@ -17,7 +17,13 @@ const chat = {
         reply : (state, status) => state.reply = status,
         contact : (state, contact) => state.contact = contact,
         transaction_status : (state, status) => state.transaction_status = status,
-        setTransactionId : (state, id) => state.transaction_id = id
+        setTransactionId : (state, id) => state.transaction_id = id,
+        updateMessage: (state, updatedMessage) => {
+            const index = state.postMessages.findIndex(message => message.id == updatedMessage.id)
+            if(index !== -1){
+                state.postMessages.splice(index, 1, updatedMessage)
+            }
+        }
     },
     actions:{
         async getPostMessages({rootGetters, commit, state}){
@@ -28,7 +34,6 @@ const chat = {
                     }
                 })
                 commit('setPostMessages', res.data)
-                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
@@ -83,7 +88,6 @@ const chat = {
                     }
                 })
                 commit('setMessages', res.data)
-                console.log(res.data)
             } catch (error) {
                 console.log(error)
             }

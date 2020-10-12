@@ -116,7 +116,7 @@ const post = {
                 console.log(error)
             }
         },
-        async createPost({commit, rootGetters, state}, payload){
+        async createPost({commit, rootGetters, state, dispatch}, payload){
             commit('setMessage', '')
             commit('setErrors', '')
             try {
@@ -143,13 +143,13 @@ const post = {
                 commit('setMessage', res.data.message)
                 console.log(res.data)
 
-                // if(state.postType == 1){
-                //     router.push('/profile')
-                //     dispatch('getUsersPost', state.postType)
-                // }else{
-                //     router.push('/my-needs')
-                //     dispatch('getUsersPost', state.postType)
-                // }
+                if(state.postType == 1){
+                    router.push('/profile')
+                    dispatch('getUsersPost', state.postType)
+                }else{
+                    router.push('/my-needs')
+                    dispatch('getUsersPost', state.postType)
+                }
 
             } catch (error) {
                 console.log(error)

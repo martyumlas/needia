@@ -17,7 +17,7 @@
 
           </li>
       </ul>
-      <Pagination :data='messages'  @pagination-change-page="getMessages"/>
+      <Pagination :data='messages'  @pagination-change-page="getMessages" v-if="messages"/>
   </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
             this.$store.commit('transaction_status', message.transaction.status)
             this.$store.commit('setTransactionId', message.transaction.id)
             this.$router.push('/chat')
-        }
+        },
     }
 
 }

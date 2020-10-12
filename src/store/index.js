@@ -117,7 +117,9 @@ const store = new Vuex.Store({
 
            }
        },
-        logout({commit, dispatch}){
+       async logout({commit, dispatch, rootGetters}){
+            await axios.post('api/user/'+rootGetters.user.id+'/logout')
+
             dispatch('removeToken')
             .then(commit('isLoggedIn', false))
             .then(commit('setUser', ''))

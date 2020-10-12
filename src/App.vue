@@ -27,10 +27,9 @@ export default {
   methods:{
     register(){
       this.$store.dispatch('registerToken')
-    }
+    },
   },
   mounted(){
-
 
     if(this.tokenRegistrationError != '') {
       this.register();
@@ -56,16 +55,22 @@ export default {
             setTimeout(() => {
                this.$store.commit('pushMessage', e.message)
               //  this.$store.commit('transaction_status', e.message.transaction.status)
-               console.log(e.message)
+              //  console.log(e.message)
             }, 1000)
       })
+
+      window.Echo.private(`messages.${this.user.id}`)
+          .listen('SeenMessage', (e) => {
+           this.$store.commit('updateMessage', e.message)
+      })
+
 
       window.Echo.private(`messages.${this.user.id}`)
           .listen('SystemMessage', (e) => {
             setTimeout(() => {
                this.$store.commit('pushMessage', e.message)
               // this.$store.commit('transaction_status', e.message.transaction.status)
-               console.log(e.message)
+              //  console.log(e.message)
             }, 1000)
       })
     }

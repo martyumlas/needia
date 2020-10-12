@@ -18,6 +18,7 @@
                         <div class="text" v-if="message.text">
                            {{message.text}}
                         </div>
+
                         <div v-if="message.session" class="images">
                             <div v-for="image in message.session.images" :key="image.id" >
                                  <img :src="baseUrl + image.photo_url" alt="" style="height:100px; width: 100px;" >
@@ -28,7 +29,9 @@
                                 <div><a :href="baseUrl + file.file_url">{{file.file_alt}}</a></div>
                             </div>
                         </div>
+                         <span v-if="message.read && message.from == user.id">seen {{message.read_time}}</span>
                     </li>
+
                 </ul>
             </div>
              <div class="row container mb-3">
@@ -40,7 +43,7 @@
                 </div>
             </div>
             <div class="form-group d-flex">
-                <textarea class="form-control" v-model="text" @keyup.enter="send"></textarea>
+                <textarea class="form-control" v-model="text" @keyup.enter="send" @focus="updateSeen"></textarea>
                 <button class="btn btn-primary material-icons" @click="send">send</button>
             </div>
             <div class="large-12 medium-12 small-12 cell">
@@ -71,6 +74,7 @@
 import { mapGetters } from 'vuex'
 import Errors from './Errors'
 import Message from './Message'
+import axios from 'axios'
 export default {
     components: {Errors, Message},
     computed:mapGetters(['post', 'postMessages', 'user', 'password', 'baseUrl','transaction_status', 'message', 'errors']),
@@ -79,6 +83,7 @@ export default {
             text: '',
             images:[],
             files:[],
+            lastMessage:{}
         }
     },
     methods:{
@@ -121,6 +126,9 @@ export default {
                 reader.readAsDataURL(this.images[i]);
             }
         },
+        updateSeen(){
+            this.seen()
+        },
         removeImage( key ){
             if(this.isEditing){
                this.post.images.splice(key, 1)
@@ -141,14 +149,27 @@ export default {
         },
         handleReview(){
             this.$router.push('/review/'+ this.post.id + '/' + this.postMessages[0].transaction_id)
+        },
+        seen(){
+              this.lastMessage = this.postMessages[this.postMessages.length-1]
+            if(this.lastMessage && this.lastMessage.to == this.user.id) {
+                axios.patch('api/message/' + this.lastMessage.id + '/seen')
+                .then(console.log('seen'))
+            }
         }
 
     },
     mounted(){
+
+        this.lastMessage = this.postMessages[this.postMessages.length-1]
+        this.seen()
         this.$store.dispatch('getPostMessages')
 
         var container = this.$el.querySelector(".messages");
         container.scrollTop = container.scrollHeight;
+
+
+
 
     }
 
