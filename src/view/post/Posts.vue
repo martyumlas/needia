@@ -127,6 +127,7 @@ export default {
         this.$store.commit('setFilterType', '1')
         this.$store.commit('setUsers', '')
         this.$store.commit('setCondition', '')
+        this.$store.commit('setRating', '')
         this.$store.commit('setModeOfShipping', '')
         this.$store.commit('setModeOfPayment', '')
         this.$store.commit('setMinPrice', '')

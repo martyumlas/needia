@@ -10,6 +10,14 @@
   <footer class="py-5 bg-dark fixed-bottom" style="margin-top:200px">
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+      <div class="d-flex justify-content-around">
+        <a :href="baseUrl + 'faq#'" target="_blank">faq</a>
+        <a :href="baseUrl + 'faq#1'" target="_blank">about</a>
+        <a :href="baseUrl + 'faq#2'" target="_blank">contact</a>
+        <a :href="baseUrl + 'faq#4'" target="_blank">terms and policies</a>
+        <a :href="baseUrl + 'faq#5'" target="_blank">data and Cookies Policy</a>
+      </div>
+
     </div>
     <!-- /.container -->
   </footer>
@@ -20,17 +28,25 @@
 import Navbar from './components/Navbar'
 import Echo from 'laravel-echo';
 import { mapGetters } from 'vuex';
+import axios from 'axios'
 export default {
   name: 'App',
   components:{Navbar},
-  computed:mapGetters(['baseUrl','user', 'basicAuth', 'tokenRegistrationError']),
+  computed:mapGetters(['baseUrl','user', 'basicAuth', 'tokenRegistrationError', 'baseUrl']),
   methods:{
     register(){
       this.$store.dispatch('registerToken')
     },
+    offline(){
+        axios.patch('api/user/'+this.user.id+'/online-status', {status: 0})
+    },
+    online(){
+      axios.patch('api/user/'+this.user.id+'/online-status', {status: 1})
+    }
   },
   mounted(){
-
+    this.online()
+    window.addEventListener('beforeunload', this.offline())
     if(this.tokenRegistrationError != '') {
       this.register();
     }
@@ -38,7 +54,7 @@ export default {
     if(this.user){
 
       window.Echo = new Echo({
-          broadcaster: 'pusher',
+          broadcaster: 'pusher',  
           key: '5f935cf5b004088ca696',
           cluster: 'ap1',
           encrypted: false,

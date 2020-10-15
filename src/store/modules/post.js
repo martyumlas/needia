@@ -19,6 +19,7 @@ const post = {
         filterType : '1',
         users : [],
         condition: '',
+        rating: '',
         mode_of_shipping: '',
         mode_of_payment : '',
         min_price : '',
@@ -48,6 +49,7 @@ const post = {
         setFilterType : (state, type) => state.filterType = type,
         setUsers : (state, users) => state.users = users,
         setCondition : (state, condition) => state.condition = condition,
+        setRating : (state, rating) => state.rating = rating,
         setModeOfShipping : (state, shipping) => state.mode_of_shipping = shipping,
         setModeOfPayment : (state, payment) => state.mode_of_payment = payment,
         setMinPrice : (state, price) => state.min_price = price,
@@ -291,7 +293,8 @@ const post = {
                         city: state.city,
                         distance: state.distance,
                         latitude : state.latitude,
-                        longitude : state.longtitude
+                        longitude : state.longtitude,
+                        rating: state.rating
                     }
                 })
 

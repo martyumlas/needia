@@ -45,6 +45,16 @@
             <label for="">Max Price</label>
             <input type="number" class="form-control" v-model="max_price"  @keyup.enter='setMaxPrice'>
         </div>
+         <div class="form-group">
+            <label for="exampleFormControlSelect1">Rating</label>
+            <select class="form-control" id="exampleFormControlSelect1" v-model="rating" @change="setRating">
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+            </select>
+        </div>
     </div>
      <div class="col-md-3">
         Deal Settings
@@ -96,6 +106,7 @@ export default {
             sortDirection: 'ASC',
             filterType: '',
             condition: '',
+            rating: '',
             min_price: '',
             max_price: '',
             mode_of_shipping: '',
@@ -172,6 +183,10 @@ export default {
         },
         setCondition(){
             this.$store.commit('setCondition', this.condition)
+            this.$store.dispatch('getPosts', '')
+        },
+        setRating(){
+            this.$store.commit('setRating', this.rating)
             this.$store.dispatch('getPosts', '')
         },
         setModeOfShipping(){
