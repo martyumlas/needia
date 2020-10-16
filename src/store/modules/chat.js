@@ -84,7 +84,8 @@ const chat = {
             try {
                 const res = await axios.get('api/user/'+rootGetters.user.id+'/messages?page=' + payload.page,{
                     params:{
-                        post_type : payload.post_type
+                        post_type : payload.post_type,
+                        filter: payload.filter
                     }
                 })
                 commit('setMessages', res.data)
