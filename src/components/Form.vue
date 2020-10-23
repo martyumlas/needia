@@ -44,7 +44,7 @@
                 <li v-for="item in post.sub_category" :key="item.id">{{item.title}}</li>
             </ul>
             <ul>
-                <li v-for="(item, index) in subcats" :key="index">{{item}}</li>
+                <li v-for="(item, index) in subcats" :key="index"><span class="mr-3">{{item}} </span><button class="close" @click="removeSubcat(item)">x</button></li>
             </ul>
         </div>
         <div class="form-group" v-if="typeId !== 4">
@@ -229,6 +229,10 @@ export default {
                 }
             })
 
+        },
+        removeSubcat(item){
+           let index = this.sub_categories.indexOf(item);
+           this.sub_categories.splice(index)
         },
         handlePost(){
             if(this.isEditing){

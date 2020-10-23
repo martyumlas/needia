@@ -26,7 +26,6 @@
 
           <div v-if="filterType === '1'">
 
-            <div v-if="user">
               <Loader v-if="loading"/>
               <div v-else>
                 <div v-if="!searchString && !searchCategory">
@@ -46,10 +45,6 @@
 
               </div>
 
-            </div>
-            <div v-else>
-               <PostContent @clickInsight="clickInsight"  :posts='posts' @topPicks='topPicks'  :type='2'/>
-            </div>
           </div>
            <div  v-if="filterType > '1'">
             <Users/>

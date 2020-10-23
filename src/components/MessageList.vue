@@ -13,7 +13,8 @@
                  </p>
 
                 <button class="btn btn-primary mr-4" v-if="message.transaction.status != 0">{{message.transaction.status == 1 ? 'On Going Deal' : message.transaction.status == 2 ? 'Sold' : ''}}</button>
-                <button class="btn btn-primary" v-if="message.read == 0" @click="markAsRead(message)">Mark As Read</button>
+                <button class="btn btn-primary mr-4" v-if="message.read == 0" @click="markAsRead(message)">Mark As Read</button>
+                <button class="btn btn-danger" @click="deleteMessage(message.transaction.id)">Delete</button>
               </div>
 
           </li>
@@ -50,6 +51,12 @@ export default {
                     //     if(index !== -1){
                     //         this.messages.data.splice(index, 1, res.data)
                     //     }
+            })
+        },
+        deleteMessage(id){
+            axios.delete('api/transaction/' +id+ '/delete').then(res => {
+                this.$store.dispatch('getMessages', {post_type: this.id})
+                alert(res.data.message)
             })
         }
     },

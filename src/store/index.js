@@ -118,14 +118,13 @@ const store = new Vuex.Store({
            }
        },
        async logout({commit, dispatch, rootGetters}){
-            await axios.post('api/user/'+rootGetters.user.id+'/logout')
-
-            dispatch('removeToken')
-            .then(commit('isLoggedIn', false))
-            .then(commit('setUser', ''))
-            .then('setToken', '')
-            .then(dispatch('fetchPost', {})).then(router.push('/'))
-
+            await axios.post('api/user/'+rootGetters.user.id+'/logout').then(() => {
+                dispatch('removeToken')
+                .then(commit('isLoggedIn', false))
+                .then(commit('setUser', ''))
+                .then('setToken', '')
+                .then(dispatch('fetchPost', {})).then(router.push('/'))
+            })
         },
         async resetPassword({commit}, payload){
             commit('setErrors', '')
