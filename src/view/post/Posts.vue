@@ -1,8 +1,10 @@
 <template>
 <div class="container">
+  <i class="material-icons  d-sm-block d-lg-none" @click="is_show = !is_show">filter_list</i>
   <div class="row">
-      <Categories/>
-      <div class="col-lg-9" >
+      <Categories :is_show='is_show'/>
+      <div class="col-lg-9">
+
         <Loader v-if="loading" />
           <div v-else class="my-3">
 
@@ -71,6 +73,11 @@ import Users from '../../components/Users'
 import axios from 'axios'
 import PostContent from '../../components/PostsContent'
 export default {
+    data(){
+      return{
+        is_show: false
+      }
+    },
     components:{Categories, Loader, FilterPost, Users, PostContent},
     computed:mapGetters(['posts','user', 'baseUrl', 'searchString', 'loading', 'searchSubCategory', 'users', 'filterType', 'postType', 'searchCategory', 'relatedPosts', 'latestFinds']),
     methods:{
@@ -100,7 +107,7 @@ export default {
       clearSubCat(){
         this.$store.commit('setSearchSubCategoriesId', '')
         this.$store.commit('setSearchSubCategories', '')
-        this.$store.dispatch('fetchPost', {})
+        this.$store.dispatch('getPosts', {})
 
       },
       clearCat(){
@@ -110,7 +117,7 @@ export default {
       },
       clearSearch(){
         this.$store.commit('setSearchString', '')
-        this.$store.dispatch('fetchPost', {})
+        this.$store.dispatch('getPosts', {})
         this.clearFilters()
       },
       clearFilters(){
@@ -134,6 +141,9 @@ export default {
         this.$store.commit('setLat', '')
         this.$store.commit('setLong', '')
 
+      },
+      showCat(){
+        alert('hello')
       }
     },
     mounted(){
